@@ -14,19 +14,23 @@ type OtherLiability = {
   monthlyPayment: string;
 };
 
-export default function LiabilitiesPage() {
+export default async function LiabilitiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ id?: string }>
+}) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const borrowerId = searchParams.get('id')
+  const params = await searchParams;
+  const borrowerId = params?.id ?? '';
   const supabase = createClient()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
+
   // Liabilities State Management
   const [hasOtherLiabilities, setHasOtherLiabilities] = useState("no")
   const [liabilities, setLiabilities] = useState<OtherLiability[]>([])
   const [isAddingLiability, setIsAddingLiability] = useState(true)
-  
+
   const [liabilityForm, setLiabilityForm] = useState({
     liabilityType: "",
     monthlyPayment: ""
@@ -52,9 +56,9 @@ export default function LiabilitiesPage() {
       console.error("Liability validation failed: Type is required.")
       return;
     }
-    
+
     setLiabilities([...liabilities, { ...liabilityForm, id: Date.now() } as OtherLiability])
-    
+
     // Reset the form
     setLiabilityForm({
       liabilityType: "",
@@ -65,7 +69,7 @@ export default function LiabilitiesPage() {
 
   const removeLiability = (idToRemove: number) => {
     setLiabilities(liabilities.filter(l => l.id !== idToRemove))
-    if (liabilities.length === 1) setIsAddingLiability(true) 
+    if (liabilities.length === 1) setIsAddingLiability(true)
   }
 
   // --- Master Database Submission ---
@@ -98,10 +102,10 @@ export default function LiabilitiesPage() {
     }
 
     console.log("Liabilities saved successfully.")
-    
+
     // Send to the next section in your pipeline (e.g., Real Estate or Declarations)
     // For now, routing to success, but you can change this to your next actual page
-    router.push(`/userjourney/success?id=${borrowerId}`) 
+    router.push(`/userjourney/documents`)
   }
 
   return (
@@ -118,7 +122,7 @@ export default function LiabilitiesPage() {
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest p-10 rounded-xl shadow-sm border border-outline-variant/10 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-secondary/30"></div>
-          
+
           <form className="space-y-8" onSubmit={handleSubmit} suppressHydrationWarning>
 
             {/* OTHER LIABILITIES SECTION */}
@@ -143,7 +147,7 @@ export default function LiabilitiesPage() {
               {hasOtherLiabilities === "yes" && (
                 <div className="pt-8 space-y-6">
                   <h3 className="text-xl font-medium text-primary">Liabilities - Other</h3>
-                  
+
                   {/* Render Saved Liabilities */}
                   {liabilities.length > 0 && (
                     <div className="space-y-4 mb-6">
@@ -171,12 +175,12 @@ export default function LiabilitiesPage() {
                   {isAddingLiability ? (
                     <div className="space-y-6 pt-4">
                       <FieldGroup className="flex flex-col sm:flex-row gap-6 items-start">
-                        
+
                         <Field className="flex-1 w-full">
                           <FieldLabel htmlFor="lia-liability-type" className={!liabilityForm.liabilityType ? "text-destructive" : "text-primary"}>Type</FieldLabel>
-                          <select 
-                            id="lia-liability-type" 
-                            value={liabilityForm.liabilityType} 
+                          <select
+                            id="lia-liability-type"
+                            value={liabilityForm.liabilityType}
                             onChange={handleLiabilityChange}
                             className={`w-full px-0 py-2 border-b-2 border-x-0 border-t-0 focus:ring-0 focus:border-secondary text-primary bg-transparent rounded-none ${!liabilityForm.liabilityType ? 'border-destructive' : 'border-outline-variant/50'}`}
                           >
@@ -194,13 +198,13 @@ export default function LiabilitiesPage() {
                           <FieldLabel htmlFor="lia-monthly-payment">Monthly Payment</FieldLabel>
                           <div className="relative">
                             <span className="absolute left-0 top-1/2 -translate-y-1/2 text-on-surface-variant">$</span>
-                            <Input 
-                              id="lia-monthly-payment" 
-                              type="number" 
-                              placeholder="0.00" 
-                              value={liabilityForm.monthlyPayment} 
-                              onChange={handleLiabilityChange} 
-                              className="pl-4 border-b-2 border-x-0 border-t-0 focus:ring-0 focus:border-secondary rounded-none px-0 border-outline-variant/50 bg-transparent" 
+                            <Input
+                              id="lia-monthly-payment"
+                              type="number"
+                              placeholder="0.00"
+                              value={liabilityForm.monthlyPayment}
+                              onChange={handleLiabilityChange}
+                              className="pl-4 border-b-2 border-x-0 border-t-0 focus:ring-0 focus:border-secondary rounded-none px-0 border-outline-variant/50 bg-transparent"
                             />
                           </div>
                         </Field>

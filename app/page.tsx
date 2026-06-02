@@ -29,7 +29,7 @@ export default function StratmireLanding() {
       <Loanpartner />
 
       {/* High-Contrast Lender Banner Section */}
-      <Lenderbanner />
+      {/* <Lenderbanner /> */}
 
       {/* Footer */}
       <Footer />

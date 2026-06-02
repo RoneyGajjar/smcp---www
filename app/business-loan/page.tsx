@@ -363,6 +363,7 @@ export default function BusinessLoanPage() {
                                     <option value="Social Media">Social Media</option>
                                     <option value="Referral">Friend or Colleague</option>
                                     <option value="Advertisement">Advertisement</option>
+                                    <option value="Reffered by a partner / Consultant">Referred by a partner / Consultant</option>
                                 </select>
                             </Field>
                         </div>

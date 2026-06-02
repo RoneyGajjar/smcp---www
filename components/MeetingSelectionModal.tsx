@@ -1,6 +1,8 @@
 "use client"
 import React from 'react';
 import { X, MapPin, Phone, Calendar } from 'lucide-react';
+import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
 
 interface MeetingSelectionModalProps {
     isOpen: boolean;
@@ -9,6 +11,12 @@ interface MeetingSelectionModalProps {
 
 export default function MeetingSelectionModal({ isOpen, onClose }: MeetingSelectionModalProps) {
     if (!isOpen) return null;
+    useEffect(() => {
+        (async function () {
+            const cal = await getCalApi({ "namespace": "15min" });
+            cal("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+        })();
+    }, [])
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -62,8 +70,8 @@ export default function MeetingSelectionModal({ isOpen, onClose }: MeetingSelect
 
                     {/* OPTION 3: CAL.COM INTEGRATION */}
                     <button
-                        data-cal-link="roney-gajjar-qbehlx/15min"
                         data-cal-namespace="15min"
+                        data-cal-link="roney-gajjar-qbehlx/15min"
                         data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
                         onClick={onClose}
                         className="w-full flex items-center gap-5 bg-[#0a251e] hover:bg-[#123d32] text-white p-6 rounded-xl transition-all shadow-md group"

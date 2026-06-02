@@ -119,7 +119,20 @@ export default function BorrowerInfoPage() {
   })
 
   // 1. HYDRATION: Load saved data when the component mounts
+  // 1. HYDRATION & SMART ROUTING
   useEffect(() => {
+    // --- NEW SMART ROUTING LOGIC ---
+    const params = new URLSearchParams(window.location.search);
+    const isForceNew = params.get('new') === 'true';
+    const savedLocalId = localStorage.getItem('currentApplicationId');
+
+    // If they have an existing application AND didn't explicitly request a new one, send them to the dashboard
+    if (savedLocalId && !isForceNew) {
+      router.push('/dashboard');
+      return;
+    }
+    // -------------------------------
+
     const savedId = sessionStorage.getItem('activeBorrowerId');
     if (savedId) setBorrowerId(savedId);
 
@@ -132,7 +145,7 @@ export default function BorrowerInfoPage() {
       setDependents(parsed.dependents || []);
       setAdditionalIncomes(parsed.additionalIncomes || []);
       setMailingAddress(parsed.mailingAddress || { street: "", unit: "", city: "", state: "", zip: "" });
-      
+
       setHasOtherNames(parsed.hasOtherNames || "no");
       setHasDependents(parsed.hasDependents || "no");
       setHasBeenEmployed(parsed.hasBeenEmployed || "no");
@@ -141,14 +154,14 @@ export default function BorrowerInfoPage() {
       setMilitaryStatus(parsed.militaryStatus || "");
       setMilitaryExpirationDate(parsed.militaryExpirationDate || "");
       setHasDifferentMailingAddress(parsed.hasDifferentMailingAddress || "no");
-      
+
       setHasEducation(parsed.hasEducation || "no");
       setEducationFormat(parsed.educationFormat || "");
       setIsHudApproved(parsed.isHudApproved || "");
       setHudAgencyId(parsed.hudAgencyId || "");
       setEducationProgramName(parsed.educationProgramName || "");
       setEducationCompletionDate(parsed.educationCompletionDate || "");
-      
+
       setHasCounseling(parsed.hasCounseling || "no");
       setCounselingFormat(parsed.counselingFormat || "");
       setIsCounselingHudApproved(parsed.isCounselingHudApproved || "");
@@ -168,7 +181,7 @@ export default function BorrowerInfoPage() {
   useEffect(() => {
     const draft = {
       formData, addresses, jobs, dependents, additionalIncomes, mailingAddress,
-      hasOtherNames, hasDependents, hasBeenEmployed, hasAdditionalIncome, 
+      hasOtherNames, hasDependents, hasBeenEmployed, hasAdditionalIncome,
       hasMilitaryService, militaryStatus, militaryExpirationDate,
       hasEducation, educationFormat, isHudApproved, hudAgencyId, educationProgramName, educationCompletionDate,
       hasCounseling, counselingFormat, isCounselingHudApproved, counselingHudAgencyId, counselingAgencyName, counselingCompletionDate,
@@ -176,11 +189,11 @@ export default function BorrowerInfoPage() {
     };
     sessionStorage.setItem('borrowerInfoDraft', JSON.stringify(draft));
   }, [
-    formData, addresses, jobs, dependents, additionalIncomes, mailingAddress, 
-    hasOtherNames, hasDependents, hasBeenEmployed, hasAdditionalIncome, 
-    hasMilitaryService, militaryStatus, militaryExpirationDate, 
-    hasEducation, educationFormat, isHudApproved, hudAgencyId, educationProgramName, educationCompletionDate, 
-    hasCounseling, counselingFormat, isCounselingHudApproved, counselingHudAgencyId, counselingAgencyName, counselingCompletionDate, 
+    formData, addresses, jobs, dependents, additionalIncomes, mailingAddress,
+    hasOtherNames, hasDependents, hasBeenEmployed, hasAdditionalIncome,
+    hasMilitaryService, militaryStatus, militaryExpirationDate,
+    hasEducation, educationFormat, isHudApproved, hudAgencyId, educationProgramName, educationCompletionDate,
+    hasCounseling, counselingFormat, isCounselingHudApproved, counselingHudAgencyId, counselingAgencyName, counselingCompletionDate,
     hasDifferentMailingAddress, languagePreference, creditConsent, citizenship, maritalStatus
   ]);
 
@@ -402,7 +415,7 @@ export default function BorrowerInfoPage() {
 
     setIsSubmitting(false);
     console.log("Vault record secured. ID:", finalBorrowerId);
-    
+
     // Proceed to Assets page with ID
     router.push(`/userjourney/assets?id=${finalBorrowerId}`);
   }
@@ -545,40 +558,42 @@ export default function BorrowerInfoPage() {
                     <FieldLabel htmlFor="addr-zip">Zip <span className="text-red-500">*</span></FieldLabel>
                     <Input id="addr-zip" placeholder="12345" value={addrForm.zip} onChange={handleAddressChange} />
                   </Field>
+                  <div className="grid grid-cols-2 gap-7">
+                    <Field className="col-span-12 sm:col-span-6 flex flex-col justify-end">
+                      <FieldLabel htmlFor="addr-date-moved-in">Date moved in</FieldLabel>
+                      <Input id="addr-date-moved-in" type="date" value={addrForm.dateMovedIn} onChange={handleAddressChange} />
+                    </Field>
 
-                  <Field className="col-span-12 sm:col-span-6 flex flex-col justify-end">
-                    <FieldLabel htmlFor="addr-date-moved-in">Date moved in</FieldLabel>
-                    <Input id="addr-date-moved-in" type="date" value={addrForm.dateMovedIn} onChange={handleAddressChange} />
-                  </Field>
-
-                  <div className="col-span-12 sm:col-span-6 flex items-end gap-4">
-                    {!addrForm.isCurrent && (
-                      <div className="flex-1 space-y-2">
-                        <FieldLabel htmlFor="addr-date-moved-out">Date moved out</FieldLabel>
-                        <Input id="addr-date-moved-out" type="date" value={addrForm.dateMovedOut} onChange={handleAddressChange} className="w-full" />
-                      </div>
-                    )}
-                    <label className="flex items-center gap-3 border border-outline-variant/30 px-4 rounded-md bg-white text-sm font-medium whitespace-nowrap h-[42px] cursor-pointer shadow-sm hover:bg-slate-50 transition-colors">
-                      <input type="checkbox" id="addr-is-current" checked={addrForm.isCurrent} onChange={handleAddressChange} className="w-4 h-4 cursor-pointer text-secondary" />
-                      This is {formData.firstName || "Roney"}&apos;s current residence.
-                    </label>
+                    <div className="col-span-12 sm:col-span-6 flex items-end gap-4">
+                      {!addrForm.isCurrent && (
+                        <div className="flex-1 space-y-2">
+                          <FieldLabel htmlFor="addr-date-moved-out">Date moved out</FieldLabel>
+                          <Input id="addr-date-moved-out" type="date" value={addrForm.dateMovedOut} onChange={handleAddressChange} className="w-full" />
+                        </div>
+                      )}
+                      <label className="flex items-center gap-3 border border-outline-variant/30 px-4 rounded-md bg-white text-sm font-medium whitespace-nowrap h-[42px] cursor-pointer shadow-sm hover:bg-slate-50 transition-colors">
+                        <input type="checkbox" id="addr-is-current" checked={addrForm.isCurrent} onChange={handleAddressChange} className="w-4 h-4 cursor-pointer text-secondary" />
+                        This is {formData.firstName || "Roney"}&apos;s current residence.
+                      </label>
+                    </div>
                   </div>
+
                 </FieldGroup>
 
                 <div className="space-y-4 pt-4">
                   <FieldLabel>Housing status</FieldLabel>
                   <RadioGroup value={addrForm.housingStatus} onValueChange={(val) => setAddrForm(p => ({ ...p, housingStatus: val }))} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <label className={`flex items-center gap-3 p-6 border rounded-md cursor-pointer transition-all min-h-[80px] ${addrForm.housingStatus === 'Renting' ? 'border-blue-400 bg-blue-50' : 'border-outline-variant/30 bg-white hover:bg-slate-50'}`}>
+                    <label className={`flex items-center gap-3 p-6 border rounded-md cursor-pointer transition-all ${addrForm.housingStatus === 'Renting' ? 'border-blue-400 bg-blue-50' : 'border-outline-variant/30 bg-white hover:bg-slate-50'}`}>
                       <RadioGroupItem value="Renting" id="hs-rent" className="shrink-0" />
                       <span className="font-medium text-primary">Renting</span>
                     </label>
-                    <label className={`flex items-center gap-3 p-6 border rounded-md cursor-pointer transition-all min-h-[80px] ${addrForm.housingStatus === 'Own' ? 'border-blue-400 bg-blue-50' : 'border-outline-variant/30 bg-white hover:bg-slate-50'}`}>
+                    <label className={`flex items-center gap-3 p-6 border rounded-md cursor-pointer transition-all ${addrForm.housingStatus === 'Own' ? 'border-blue-400 bg-blue-50' : 'border-outline-variant/30 bg-white hover:bg-slate-50'}`}>
                       <RadioGroupItem value="Own" id="hs-own" className="shrink-0" />
                       <span className="font-medium text-primary">Own</span>
                     </label>
-                    <label className={`flex items-center gap-3 p-6 border rounded-md cursor-pointer transition-all min-h-[80px] ${addrForm.housingStatus === 'No Expense' ? 'border-blue-400 bg-blue-50' : 'border-outline-variant/30 bg-white hover:bg-slate-50'}`}>
+                    <label className={`flex items-center gap-3 p-6 border rounded-md cursor-pointer transition-all ${addrForm.housingStatus === 'No Expense' ? 'border-blue-400 bg-blue-50' : 'border-outline-variant/30 bg-white hover:bg-slate-50'}`}>
                       <RadioGroupItem value="No Expense" id="hs-none" className="shrink-0" />
-                      <span className="font-medium text-primary leading-tight">No Expense<br /><span className="text-sm font-normal">(Living with Family)</span></span>
+                      <span className="font-medium text-primary leading-tight">No Expense<br /></span>
                     </label>
                   </RadioGroup>
                 </div>

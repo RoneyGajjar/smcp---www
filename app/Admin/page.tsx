@@ -1,97 +1,133 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  LayoutDashboard, Wallet, FileText, Building2, BarChart3, Settings,
-  Search, Calendar, Users, ChevronLeft, ChevronRight, Trash2
+  LayoutDashboard, Wallet, Building2, Settings,
+  ChevronLeft, ChevronRight, Trash2,
+  ShieldAlert, CheckCircle2, XCircle, LogOut
 } from 'lucide-react';
 import { createClient } from "@/lib/supabase"
-import { Parser } from 'json2csv';
+// import { Parser } from 'json2csv';
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const supabase = createClient();
 
+  // Auth State
+  const [adminProfile, setAdminProfile] = useState<any>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  // Data State
+  const [activeTab, setActiveTab] = useState<'borrowers' | 'lenders' | 'staff'>('borrowers');
   const [borrowers, setBorrowers] = useState<any[]>([]);
+  const [lenders, setLenders] = useState<any[]>([]);
+  const [staff, setStaff] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // FETCH BORROWERS
+  // 1. AUTHENTICATION GUARD
   useEffect(() => {
-    async function fetchBorrowers() {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from('borrowers') // Pointing to your residential table
-        .select('*')
-        .order('created_at', { ascending: false });
+    async function checkAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/admin/login');
+        return;
+      }
 
-      if (!error && data) {
-        setBorrowers(data);
+      const { data: profile } = await supabase.from('admin_profiles').select('*').eq('id', user.id).single();
+
+      if (!profile || profile.status !== 'approved') {
+        setAdminProfile(profile || { status: 'pending' });
+      } else {
+        setAdminProfile(profile);
+      }
+      setIsAuthLoading(false);
+    }
+    checkAuth();
+  }, [router, supabase]);
+
+  // 2. FETCH DASHBOARD DATA
+  useEffect(() => {
+    if (!adminProfile || adminProfile.status !== 'approved') return;
+
+    async function fetchData() {
+      setIsLoading(true);
+      if (activeTab === 'borrowers') {
+        const { data } = await supabase.from('borrowers').select('*').order('created_at', { ascending: false });
+        if (data) setBorrowers(data);
+      } else if (activeTab === 'lenders') {
+        const { data } = await supabase.from('loan_partners').select('*').order('created_at', { ascending: false });
+        if (data) setLenders(data);
+      } else if (activeTab === 'staff') {
+        const { data } = await supabase.from('admin_profiles').select('*').order('created_at', { ascending: false });
+        if (data) setStaff(data);
       }
       setIsLoading(false);
     }
-    fetchBorrowers();
-  }, [supabase]);
+    fetchData();
+  }, [activeTab, adminProfile, supabase]);
 
-  // DELETE BORROWER
+  // 3. STAFF APPROVAL HANDLER
+  const handleUpdateStaffStatus = async (id: string, newStatus: string) => {
+    const { error } = await supabase.from('admin_profiles').update({ status: newStatus }).eq('id', id);
+    if (!error) {
+      setStaff(staff.map(s => s.id === id ? { ...s, status: newStatus } : s));
+    } else {
+      alert("Failed to update staff status.");
+    }
+  };
+
+  // 4. PARTNER APPROVAL HANDLER (NEW)
+  const handleUpdatePartnerStatus = async (id: string, newStatus: string) => {
+    const { error } = await supabase.from('loan_partners').update({ status: newStatus }).eq('id', id);
+    if (!error) {
+      setLenders(lenders.map(p => p.id === id ? { ...p, status: newStatus } : p));
+    } else {
+      alert("Failed to update partner status.");
+    }
+  };
+
+  // UNIFIED DELETE
   const handleDelete = async (id: string) => {
-    const isConfirmed = window.confirm("Are you sure you want to permanently delete this residential application? This action cannot be undone.");
+    const table = activeTab === 'borrowers' ? 'borrowers' : activeTab === 'lenders' ? 'loan_partners' : 'admin_profiles';
+    const isConfirmed = window.confirm(`Are you sure you want to permanently delete this record?`);
     if (!isConfirmed) return;
 
-    const { error } = await supabase
-      .from('borrowers')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      alert("Failed to delete record: " + error.message);
-    } else {
-      setBorrowers(borrowers.filter((user) => user.id !== id));
+    const { error } = await supabase.from(table).delete().eq('id', id);
+    if (!error) {
+      if (activeTab === 'borrowers') setBorrowers(borrowers.filter((u) => u.id !== id));
+      else if (activeTab === 'lenders') setLenders(lenders.filter((u) => u.id !== id));
+      else setStaff(staff.filter((u) => u.id !== id));
     }
   };
 
-  // EXPORT CSV FUNCTION
-  const handleExport = () => {
-    if (borrowers.length === 0) {
-      alert("No data available to export.");
-      return;
-    }
-
-    try {
-      // Flatten the data to ensure complex arrays don't break the CSV format
-      const flattenedData = borrowers.map(b => ({
-        ...b,
-        address_history: JSON.stringify(b.address_history || []),
-        employment_history: JSON.stringify(b.employment_history || []),
-        additional_income_sources: JSON.stringify(b.additional_income_sources || []),
-        dependents_ages: JSON.stringify(b.dependents_ages || [])
-      }));
-
-      const parser = new Parser();
-      const csv = parser.parse(flattenedData);
-
-      // Create a blob and trigger browser download
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Vault_Export_${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error(err);
-      alert("Export failed. Please check the console for details.");
-    }
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/admin/login');
   };
 
-  const getInitials = (first: string, last: string) => {
-    if (!first && !last) return "??";
-    return `${(first || "").charAt(0)}${(last || "").charAt(0)}`.toUpperCase();
-  };
+  const handleExport = () => { /* Export Logic Here */ };
+
+  // --- RENDER STATES ---
+  if (isAuthLoading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center font-bold text-slate-500">Verifying Credentials...</div>;
+
+  if (adminProfile?.status !== 'approved') {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-100 p-8 text-center">
+          <ShieldAlert size={48} className="text-amber-500 mx-auto mb-4" />
+          <h1 className="text-2xl font-black text-slate-900 mb-2">Access Pending</h1>
+          <p className="text-slate-500 mb-6">Your account is currently awaiting approval from the Main Administrator. You will be able to access the vault once approved.</p>
+          <button onClick={handleLogout} className="text-sm font-bold text-[#042f24] hover:underline">Sign Out</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans antialiased">
-
       <div className="flex flex-1 overflow-hidden">
+
         {/* SIDEBAR */}
         <aside className="w-[260px] bg-[#042f24] text-slate-300 flex flex-col hidden lg:flex shrink-0">
           <nav className="flex-1 py-8 px-4 space-y-2 overflow-y-auto">
@@ -102,175 +138,139 @@ export default function AdminDashboard() {
               <Wallet size={20} /> Loans
             </a>
             <a href="#" className="flex items-center gap-4 px-4 py-3 hover:bg-white/5 hover:text-white rounded-lg font-medium transition-colors">
-              <FileText size={20} /> Applications
-            </a>
-            <a href="#" className="flex items-center gap-4 px-4 py-3 hover:bg-white/5 hover:text-white rounded-lg font-medium transition-colors">
               <Building2 size={20} /> Lenders
             </a>
-            <a href="#" className="flex items-center gap-4 px-4 py-3 hover:bg-white/5 hover:text-white rounded-lg font-medium transition-colors">
-              <BarChart3 size={20} /> Analytics
-            </a>
-            <a href="#" className="flex items-center gap-4 px-4 py-3 hover:bg-white/5 hover:text-white rounded-lg font-medium transition-colors">
-              <Settings size={20} /> Settings
-            </a>
+
+            {adminProfile?.role === 'main_admin' && (
+              <button onClick={() => setActiveTab('staff')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === 'staff' ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'}`}>
+                <Settings size={20} /> Access Control
+              </button>
+            )}
           </nav>
+          <div className="p-4 border-t border-white/10">
+            <button onClick={handleLogout} className="flex items-center gap-3 text-sm font-bold text-slate-400 hover:text-white transition-colors w-full p-2">
+              <LogOut size={16} /> Sign Out
+            </button>
+          </div>
         </aside>
 
         {/* MAIN CONTENT AREA */}
         <main className="flex-1 overflow-y-auto p-8 lg:p-10">
 
-          {/* Header */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-10">
             <div>
               <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Vault Analytics</h1>
-              <p className="text-slate-500 mt-1 font-medium">Overview of institutional activity and lender performance.</p>
+              <p className="text-slate-500 mt-1 font-medium">Logged in as {adminProfile?.email}</p>
             </div>
             <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-lg shadow-sm font-medium hover:bg-slate-50 transition-colors">
-                <Calendar size={18} /> Oct 24 - Oct 31, 2024
-              </button>
-
-              {/* <-- EXPORT BUTTON WIRED UP HERE --> */}
-              <button
-                onClick={handleExport}
-                className="bg-[#0a6c50] text-white px-5 py-2.5 rounded-lg shadow-sm font-bold hover:bg-[#085a42] transition-colors"
-              >
-                Export Report
-              </button>
-
+              <button onClick={handleExport} className="bg-[#0a6c50] text-white px-5 py-2.5 rounded-lg shadow-sm font-bold hover:bg-[#085a42] transition-colors">Export Report</button>
             </div>
           </div>
 
-          {/* KPI CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
-            {/* Card 1 - Dynamically connected to borrowers length */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                  <Users size={24} />
-                </div>
-                <span className="bg-emerald-50 text-emerald-600 text-xs font-bold px-2.5 py-1 rounded-full">+12%</span>
-              </div>
-              <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Total Users</p>
-              <h3 className="text-3xl font-black text-slate-900 tracking-tight">
-                {isLoading ? "..." : borrowers.length}
-              </h3>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
-                  <Building2 size={24} />
-                </div>
-                <span className="text-slate-400 text-xs font-bold px-2.5 py-1">Stable</span>
-              </div>
-              <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Total Lenders</p>
-              <h3 className="text-3xl font-black text-slate-900 tracking-tight">456</h3>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700">
-                  <FileText size={24} />
-                </div>
-                <span className="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-full">Urgent</span>
-              </div>
-              <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-1">Pending Applications</p>
-              <h3 className="text-3xl font-black text-slate-900 tracking-tight">84</h3>
-            </div>
-
-            {/* Card 4 - Dark Theme */}
-            <div className="bg-[#0a3d2e] p-6 rounded-2xl shadow-md relative overflow-hidden flex flex-col justify-between">
-              <div className="absolute right-0 bottom-0 opacity-20 pointer-events-none translate-x-4 translate-y-4">
-                <BarChart3 size={120} className="text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-emerald-100/70 text-sm font-bold uppercase tracking-wider mb-1">Total Value Locked</p>
-                <h3 className="text-4xl font-black text-white tracking-tight">$4.2B</h3>
-              </div>
-              <div className="flex items-end gap-1 mt-6 h-10">
-                <div className="w-3 bg-emerald-400 rounded-t-sm h-[40%]"></div>
-                <div className="w-3 bg-emerald-400 rounded-t-sm h-[60%]"></div>
-                <div className="w-3 bg-emerald-400 rounded-t-sm h-[80%]"></div>
-                <div className="w-3 bg-emerald-400 rounded-t-sm h-[100%]"></div>
-                <div className="w-3 bg-white rounded-t-sm h-[70%]"></div>
-              </div>
-            </div>
-          </div>
-
-          {/* TABLE SECTION */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
-            <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center">
-              <div className="flex items-center gap-8">
-                <button className="font-bold pb-2 border-b-2 border-[#0a4233] text-slate-900">Active Borrowers</button>
-              </div>
-              <div className="relative hidden sm:block">
-                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search entries..."
-                  className="w-full sm:w-64 bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a4233]/20"
-                />
+            <div className="px-8 py-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+              <div className="flex items-center gap-8 border-b border-slate-200 w-full sm:w-auto">
+                <button onClick={() => setActiveTab('borrowers')} className={`font-bold pb-2 border-b-2 transition-colors ${activeTab === 'borrowers' ? 'border-[#0a4233] text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>Active Borrowers</button>
+                <button onClick={() => setActiveTab('lenders')} className={`font-bold pb-2 border-b-2 transition-colors ${activeTab === 'lenders' ? 'border-[#0a4233] text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>Partner Network</button>
+                {adminProfile?.role === 'main_admin' && (
+                  <button onClick={() => setActiveTab('staff')} className={`font-bold pb-2 border-b-2 transition-colors ${activeTab === 'staff' ? 'border-[#0a4233] text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>Staff Approvals</button>
+                )}
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr>
-                    <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[30%]">Borrower</th>
-                    <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[20%]">Contact</th>
-                    <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[15%]">Status</th>
-                    <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[15%]">Date Applied</th>
-                    <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right w-[20%]">Actions</th>
-                  </tr>
+                  {activeTab === 'staff' ? (
+                    <tr>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[40%]">Admin Email</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[20%]">Role</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[20%]">Status</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right w-[20%]">Actions</th>
+                    </tr>
+                  ) : activeTab === 'lenders' ? (
+                    <tr>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[30%]">Partner / Business</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[20%]">Contact</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[15%]">Status</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right w-[35%]">Actions</th>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[30%]">Name</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[25%]">Contact</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest w-[25%]">Date Applied</th>
+                      <th className="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right w-[20%]">Actions</th>
+                    </tr>
+                  )}
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {isLoading ? (
-                    <tr><td colSpan={5} className="px-8 py-10 text-center text-slate-400 font-medium">Loading secure vault data...</td></tr>
-                  ) : borrowers.length === 0 ? (
-                    <tr><td colSpan={5} className="px-8 py-10 text-center text-slate-400 font-medium">No active borrowers found.</td></tr>
-                  ) : (
-                    borrowers.map((user) => (
-                      <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
+                    <tr><td colSpan={5} className="px-8 py-10 text-center text-slate-400 font-medium">Loading data...</td></tr>
+                  ) : activeTab === 'staff' ? (
+                    // --- STAFF TABLE ---
+                    staff.map((user) => (
+                      <tr key={user.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-8 py-5 font-bold text-slate-900">{user.email}</td>
+                        <td className="px-8 py-5 text-sm uppercase tracking-wider font-bold text-slate-500">{user.role.replace('_', ' ')}</td>
                         <td className="px-8 py-5">
-                          <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm bg-slate-100 text-slate-600">
-                              {getInitials(user.first_name, user.last_name)}
-                            </div>
-                            <div>
-                              <p className="font-bold text-slate-900">{user.first_name} {user.last_name}</p>
-                              <p className="text-xs text-slate-500 font-mono">ID: {user.id.slice(0, 8)}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-8 py-5">
-                          <p className="text-sm font-medium text-slate-900">{user.email}</p>
-                          <p className="text-xs text-slate-500">{user.phone}</p>
-                        </td>
-                        <td className="px-8 py-5">
-                          <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase bg-emerald-50 text-emerald-600">RECEIVED</span>
-                        </td>
-                        <td className="px-8 py-5">
-                          <p className="text-sm font-bold text-slate-900">{new Date(user.created_at).toLocaleDateString()}</p>
+                          <span className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase ${user.status === 'approved' ? 'bg-emerald-50 text-emerald-600' :
+                            user.status === 'pending' ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'
+                            }`}>{user.status}</span>
                         </td>
                         <td className="px-8 py-5 text-right">
-                          <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => handleDelete(user.id)}
-                              className="p-2 text-red-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50"
-                              title="Delete Application"
-                            >
-                              <Trash2 size={18} />
-                            </button>
-                            <Link
-                              href={`/Admin/application/${user.id}`}
-                              className="px-4 py-2 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors inline-block"
-                            >
-                              Manage
-                            </Link>
+                          {user.status === 'pending' && user.role !== 'main_admin' && (
+                            <div className="flex items-center justify-end gap-2">
+                              <button onClick={() => handleUpdateStaffStatus(user.id, 'approved')} className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg"><CheckCircle2 size={20} /></button>
+                              <button onClick={() => handleUpdateStaffStatus(user.id, 'rejected')} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><XCircle size={20} /></button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : activeTab === 'borrowers' ? (
+                    // --- BORROWERS TABLE ---
+                    borrowers.map((user) => (
+                      <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
+                        <td className="px-8 py-5 font-bold text-slate-900">{user.first_name} {user.last_name}</td>
+                        <td className="px-8 py-5 text-sm text-slate-600">{user.email}</td>
+                        <td className="px-8 py-5 text-sm font-bold text-slate-900">{new Date(user.created_at).toLocaleDateString()}</td>
+                        <td className="px-8 py-5 text-right flex items-center justify-end">
+                          <button onClick={() => handleDelete(user.id)} className="p-2 text-red-400 hover:text-red-600 mr-2"><Trash2 size={18} /></button>
+                          <Link href={`/admin/application/${user.id}`} className="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-200">Manage</Link>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    // --- PARTNERS TABLE ---
+                    lenders.map((partner) => (
+                      <tr key={partner.id} className="hover:bg-slate-50/50 transition-colors group">
+                        <td className="px-8 py-5 font-bold text-slate-900">
+                          {partner.full_legal_name}
+                          <div className="text-xs font-normal text-slate-500 mt-1">{partner.business_name || 'Independent'}</div>
+                        </td>
+                        <td className="px-8 py-5 text-sm text-slate-600">{partner.email}</td>
+                        <td className="px-8 py-5">
+                          <span className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase ${partner.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-600' :
+                            partner.status === 'PENDING' ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'
+                            }`}>{partner.status || 'PENDING'}</span>
+                        </td>
+                        <td className="px-8 py-5 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {/* INLINE APPROVAL BUTTONS */}
+                            {(!partner.status || partner.status === 'PENDING') && (
+                              <div className="flex items-center gap-1 mr-3 border-r border-slate-200 pr-3">
+                                <button onClick={() => handleUpdatePartnerStatus(partner.id, 'APPROVED')} className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Approve Partner">
+                                  <CheckCircle2 size={18} />
+                                </button>
+                                <button onClick={() => handleUpdatePartnerStatus(partner.id, 'REJECTED')} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Reject Partner">
+                                  <XCircle size={18} />
+                                </button>
+                              </div>
+                            )}
+                            <button onClick={() => handleDelete(partner.id)} className="p-2 text-red-400 hover:text-red-600 transition-colors rounded-lg"><Trash2 size={18} /></button>
+                            <Link href={`/admin/partner/${partner.id}`} className="px-4 py-2 bg-[#0a6c50] text-white text-xs font-bold rounded-lg hover:bg-[#085a42] transition-colors ml-2">Review</Link>
                           </div>
                         </td>
                       </tr>
@@ -279,17 +279,6 @@ export default function AdminDashboard() {
                 </tbody>
               </table>
             </div>
-
-            {/* Pagination Footer */}
-            <div className="px-8 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <span className="text-xs font-medium text-slate-500">Showing {borrowers.length} entities</span>
-              <div className="flex items-center gap-1">
-                <button className="w-8 h-8 flex items-center justify-center rounded-md text-slate-400 hover:bg-white hover:text-slate-900 transition-colors"><ChevronLeft size={16} /></button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-md bg-[#042f24] text-white font-bold text-sm shadow-sm">1</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-md text-slate-400 hover:bg-white hover:text-slate-900 transition-colors"><ChevronRight size={16} /></button>
-              </div>
-            </div>
-
           </div>
         </main>
       </div>

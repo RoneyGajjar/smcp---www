@@ -20,7 +20,7 @@ const Loanprogram = () => {
                                     <h3 className="text-2xl font-headline font-extrabold text-white mb-6 uppercase tracking-tight">Business Loan</h3>
                                 </div>
                                 <div className="flip-card-back border border-white/5 bg-primary">
-                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-sm">
+                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-xl">
                                         Scalable capital solutions for enterprise growth, inventory expansion, and strategic acquisitions. Engineered for rapid deployment and long-term stability.
                                     </p>
                                     <a className="bg-white text-primary font-headline font-bold text-xs uppercase tracking-widest px-10 py-4 hover:bg-secondary-fixed hover:text-primary transition-all rounded-md shadow-xl" href="#">
@@ -39,7 +39,7 @@ const Loanprogram = () => {
                                     <h3 className="text-2xl font-headline font-extrabold text-white mb-6 uppercase tracking-tight">Commercial Property</h3>
                                 </div>
                                 <div className="flip-card-back border border-white/5 bg-primary">
-                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-sm">
+                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-xl">
                                         Tier-one financing for multi-family, industrial, and retail developments. We offer competitive LTV ratios and flexible amortization schedules.
                                     </p>
                                     <a className="bg-white text-primary font-headline font-bold text-xs uppercase tracking-widest px-10 py-4 hover:bg-secondary-fixed hover:text-primary transition-all rounded-md shadow-xl" href="#">
@@ -58,7 +58,7 @@ const Loanprogram = () => {
                                     <h3 className="text-2xl font-headline font-extrabold text-white mb-6 uppercase tracking-tight">Investment Propertry</h3>
                                 </div>
                                 <div className="flip-card-back border border-white/5 bg-primary">
-                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-sm">
+                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-xl">
                                         Flexible credit facilities tailored for portfolio diversification and high-yield investment opportunities. Designed for savvy real estate investors.
                                     </p>
                                     <a className="bg-white text-primary font-headline font-bold text-xs uppercase tracking-widest px-10 py-4 hover:bg-secondary-fixed hover:text-primary transition-all rounded-md shadow-xl" href="#">
@@ -77,7 +77,7 @@ const Loanprogram = () => {
                                     <h3 className="text-2xl font-headline font-extrabold text-white mb-6 uppercase tracking-tight">Construction Property</h3>
                                 </div>
                                 <div className="flip-card-back border border-white/5 bg-primary">
-                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-sm">
+                                    <p className="text-gray-300 font-body mb-10 leading-relaxed text-xl">
                                         Tier-one financing for multi-family, industrial, and retail developments. We offer competitive LTV ratios and flexible amortization schedules.
                                     </p>
                                     <a className="bg-white text-primary font-headline font-bold text-xs uppercase tracking-widest px-10 py-4 hover:bg-secondary-fixed hover:text-primary transition-all rounded-md shadow-xl" href="#">

@@ -38,10 +38,10 @@ export async function middleware(request: NextRequest) {
   if (!user && request.nextUrl.pathname.startsWith('/userjourney')) {
     const url = request.nextUrl.clone()
     url.pathname = '/login' // Redirect to your login page
-    
+
     // Pro-tip: Pass the intended destination so you can route them back after they log in
-    url.searchParams.set('next', '/userjourney') 
-    
+    url.searchParams.set('next', '/userjourney')
+
     return NextResponse.redirect(url)
   }
 

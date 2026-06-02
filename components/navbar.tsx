@@ -11,7 +11,7 @@ export default async function Navbar() {
 
   return (
     <>
-      <header className="bg-brand-dark border-b border-primary-container sticky top-0 z-50">
+      <header className="bg-primary-container border-b border-primary-container sticky top-0 z-50">
         <div className="flex justify-between items-center w-full px-6 py-4 max-w-9xl mx-auto h-24">
           <Link href="/">
             <div className="text-2xl font-black text-white tracking-tighter font-headline flex items-center gap-2 px-0 py-0">
@@ -28,9 +28,9 @@ export default async function Navbar() {
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/">Home</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/about">About Us</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/loanprogram">Loan Programs</Link>
-              <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/partners">Become a Partner</Link>
+              <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/become-partner">Become a Partner</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/mortgagecalc">Mortgage Calculator</Link>
-              <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/business-services">Business Services</Link>
+              <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/business-service">Business Services</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/contact">Contact Us</Link>
             </div>
           </nav>

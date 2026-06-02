@@ -1,146 +1,282 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from "@/lib/supabase";
-import { ArrowRight, ShieldCheck, Briefcase } from 'lucide-react';
+import { createClient } from '@/lib/supabase';
+import { Building2, ArrowRight, Loader2, User, ShieldAlert, Briefcase, FileSignature } from 'lucide-react';
+import Link from 'next/link';
 
 export default function BecomePartnerPage() {
     const router = useRouter();
     const supabase = createClient();
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Comprehensive Form State mapped to Stratmire Application Requirements
     const [formData, setFormData] = useState({
-        firstName: '', lastName: '', email: '', phone: '',
-        businessName: '', city: '', state: '', referringCode: '',
-        wantsOverride: 'no', signature: ''
+        // Account Setup
+        password: '',
+
+        // Applicant Information
+        fullLegalName: '', businessName: '', phone: '', email: '',
+        dob: '', ssnLast4: '', homeAddress: '', referredBy: '',
+
+        // Compliance & Disclosures
+        felonyHistory: 'no', bankruptcyHistory: 'no',
+
+        // Professional Background
+        currentOccupation: '', companyName: '', yearsExperience: '', relevantExperience: '',
+
+        // Agreement & Acknowledgment
+        acknowledgment: false, signature: '', printName: ''
     });
 
-    const [agreed, setAgreed] = useState({
-        accurate: false, consented: false, noMisleading: false, complies: false
-    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target;
+        if (type === 'checkbox') {
+            const checked = (e.target as HTMLInputElement).checked;
+            setFormData(prev => ({ ...prev, [name]: checked }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handlePartnerSignup = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!agreed.accurate || !agreed.consented || !agreed.noMisleading || !agreed.complies) {
-            alert("You must agree to all compliance checkboxes before submitting.");
+
+        // Frontend Validation
+        if (!formData.acknowledgment) {
+            setError("You must acknowledge the terms to proceed.");
             return;
         }
 
-        setIsSubmitting(true);
+        setLoading(true);
+        setError(null);
 
-        const { error } = await supabase.from('loan_partners').insert([{
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            business_name: formData.businessName,
-            city: formData.city,
-            state: formData.state,
-            referring_partner_code: formData.referringCode,
-            wants_override: formData.wantsOverride === 'yes',
-            signature_name: formData.signature,
-            status: 'PENDING'
-        }]);
+        try {
+            // 1. Create the Authentication Account
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: formData.email,
+                password: formData.password,
+            });
 
-        setIsSubmitting(false);
+            if (authError) throw authError;
 
-        if (error) {
-            alert("Failed to submit application: " + error.message);
-        } else {
-            alert("Application submitted successfully! Our admin team will review it shortly.");
-            router.push('/'); // Redirect home
+            // 2. CRITICAL STEP: Insert the partner row into the database
+            if (authData.user) {
+
+                // Split the full name to satisfy database structure
+                const nameParts = formData.fullLegalName.trim().split(' ');
+                const firstName = nameParts[0];
+                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'N/A';
+
+                const { error: dbError } = await supabase
+                    .from('loan_partners')
+                    .insert([{
+                        id: authData.user.id,
+                        email: formData.email,
+                        first_name: firstName,
+                        last_name: lastName,
+                        phone: formData.phone,
+                        business_name: formData.businessName,
+
+                        // Mapped to match your exact existing schema requirements
+                        signature_name: formData.signature,
+                        referring_partner_code: formData.referredBy,
+
+                        // New columns we just added
+                        dob: formData.dob,
+                        ssn_last_4: formData.ssnLast4,
+                        home_address: formData.homeAddress,
+                        felony_history: formData.felonyHistory === 'yes',
+                        bankruptcy_history: formData.bankruptcyHistory === 'yes',
+                        current_occupation: formData.currentOccupation,
+                        company_name: formData.companyName,
+                        years_experience: formData.yearsExperience,
+                        relevant_experience: formData.relevantExperience,
+
+                        status: 'PENDING'
+                    }]);
+
+                if (dbError) throw dbError;
+                // 3. Route to the dashboard
+                router.push('/partner/dashboard');
+            }
+        } catch (err: any) {
+            console.error(err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const inputClass = "w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#042f24]/20 font-medium";
-    const labelClass = "text-sm font-bold text-slate-700 mb-2 block";
-
     return (
-        <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-            <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans py-12">
 
-                <header className="mb-10 text-center">
-                    <h1 className="text-4xl md:text-5xl font-black text-[#042f24] tracking-tight">Loan Partner Application</h1>
-                    <p className="mt-4 text-slate-600 text-lg">Capital without limits. Solutions without compromise.</p>
-                </header>
+            <div className="max-w-3xl w-full mb-8 text-center space-y-2">
+                <h1 className="text-4xl font-black text-[#042f24] uppercase tracking-tight">Stratmire Capital Partners LLC</h1>
+                <p className="text-lg font-medium text-slate-500">Capital without limits. Solutions without compromise.[cite: 2]</p>
+            </div>
 
-                <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-slate-100 p-8 md:p-10 space-y-10">
+            <div className="max-w-3xl w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
 
-                    {/* SECTION 1: Applicant Info */}
+                <div className="bg-[#0a6c50] p-8 text-white text-center">
+                    <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20 backdrop-blur-sm">
+                        <Building2 size={32} className="text-white" />
+                    </div>
+                    <h2 className="text-2xl font-black tracking-tight">LOAN PARTNER APPLICATION FORM[cite: 2]</h2>
+                </div>
+
+                {error && (
+                    <div className="m-8 mb-0 p-4 bg-red-50 text-red-600 rounded-lg text-sm font-bold border border-red-100 flex items-center gap-2">
+                        <ShieldAlert size={18} /> {error}
+                    </div>
+                )}
+
+                <form onSubmit={handlePartnerSignup} className="p-8 space-y-10">
+
+                    {/* APPLICANT INFORMATION */}
                     <section>
-                        <h2 className="text-xl font-bold text-[#042f24] border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
-                            <Briefcase className="text-emerald-600" size={20} /> Partner Information
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label className={labelClass}>First Name *</label><input required type="text" name="firstName" value={formData.firstName} onChange={handleInput} className={inputClass} /></div>
-                            <div><label className={labelClass}>Last Name *</label><input required type="text" name="lastName" value={formData.lastName} onChange={handleInput} className={inputClass} /></div>
-                            <div><label className={labelClass}>Email Address *</label><input required type="email" name="email" value={formData.email} onChange={handleInput} className={inputClass} /></div>
-                            <div><label className={labelClass}>Phone Number *</label><input required type="tel" name="phone" value={formData.phone} onChange={handleInput} className={inputClass} /></div>
-                            <div className="md:col-span-2"><label className={labelClass}>Business Name (If applicable)</label><input type="text" name="businessName" value={formData.businessName} onChange={handleInput} className={inputClass} /></div>
-                            <div><label className={labelClass}>City *</label><input required type="text" name="city" value={formData.city} onChange={handleInput} className={inputClass} /></div>
-                            <div><label className={labelClass}>State *</label><input required type="text" name="state" value={formData.state} onChange={handleInput} className={inputClass} /></div>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><User size={20} className="text-[#0a6c50]" /> Applicant Information[cite: 2]</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Legal Name *</label>
+                                <input type="text" name="fullLegalName" required value={formData.fullLegalName} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Business Name (If applicable)</label>
+                                <input type="text" name="businessName" value={formData.businessName} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone Number *</label>
+                                <input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Email Address *</label>
+                                <input type="email" name="email" required value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date of Birth *</label>
+                                <input type="date" name="dob" required value={formData.dob} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">SSN (Last 4) *</label>
+                                <input type="text" name="ssnLast4" required maxLength={4} value={formData.ssnLast4} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" placeholder="XXXX" />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Home Address *</label>
+                                <input type="text" name="homeAddress" required value={formData.homeAddress} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Referred by (Can only be referred by existing approved partner)</label>
+                                <input type="text" name="referredBy" value={formData.referredBy} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
                         </div>
                     </section>
 
-                    {/* SECTION 2: Referral & Overrides */}
+                    {/* COMPLIANCE & DISCLOSURES */}
                     <section>
-                        <h2 className="text-xl font-bold text-[#042f24] border-b border-slate-100 pb-3 mb-6">Referral Details</h2>
-                        <div className="space-y-6">
-                            <div>
-                                <label className={labelClass}>Were you referred by an existing partner? (Enter their Unique Code)</label>
-                                <input type="text" name="referringCode" placeholder="e.g. JOHN1234" value={formData.referringCode} onChange={handleInput} className={inputClass} />
-                            </div>
-                            <div>
-                                <label className={labelClass}>Do you intend to receive recruiting override compensation?</label>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><ShieldAlert size={20} className="text-[#0a6c50]" /> Compliance & Disclosures[cite: 2]</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <label className="block text-sm font-bold text-slate-700 mb-3">Felony or Financial Crime History? *</label>
                                 <div className="flex gap-4">
-                                    <label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="wantsOverride" value="yes" checked={formData.wantsOverride === 'yes'} onChange={handleInput} className="w-4 h-4 text-[#042f24]" /> Yes</label>
-                                    <label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="wantsOverride" value="no" checked={formData.wantsOverride === 'no'} onChange={handleInput} className="w-4 h-4 text-[#042f24]" /> No</label>
+                                    <label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="felonyHistory" value="yes" checked={formData.felonyHistory === 'yes'} onChange={handleInputChange} className="text-[#0a6c50] focus:ring-[#0a6c50]" /> Yes</label>
+                                    <label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="felonyHistory" value="no" checked={formData.felonyHistory === 'no'} onChange={handleInputChange} className="text-[#0a6c50] focus:ring-[#0a6c50]" /> No</label>
+                                </div>
+                            </div>
+                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <label className="block text-sm font-bold text-slate-700 mb-3">Bankruptcy / Foreclosure History? *</label>
+                                <div className="flex gap-4">
+                                    <label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="bankruptcyHistory" value="yes" checked={formData.bankruptcyHistory === 'yes'} onChange={handleInputChange} className="text-[#0a6c50] focus:ring-[#0a6c50]" /> Yes</label>
+                                    <label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="bankruptcyHistory" value="no" checked={formData.bankruptcyHistory === 'no'} onChange={handleInputChange} className="text-[#0a6c50] focus:ring-[#0a6c50]" /> No</label>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    {/* SECTION 3: Compliance */}
+                    {/* PROFESSIONAL BACKGROUND */}
                     <section>
-                        <h2 className="text-xl font-bold text-[#042f24] border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
-                            <ShieldCheck className="text-emerald-600" size={20} /> Compliance & Acknowledgment
-                        </h2>
-                        <p className="text-sm text-slate-500 mb-4">By submitting this referral, the Partner confirms:</p>
-                        <div className="space-y-3">
-                            <label className="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" required checked={agreed.accurate} onChange={(e) => setAgreed({ ...agreed, accurate: e.target.checked })} className="mt-1 w-4 h-4 rounded border-slate-300 text-[#042f24]" />
-                                <span className="text-sm font-medium text-slate-700">The information provided is accurate</span>
-                            </label>
-                            <label className="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" required checked={agreed.consented} onChange={(e) => setAgreed({ ...agreed, consented: e.target.checked })} className="mt-1 w-4 h-4 rounded border-slate-300 text-[#042f24]" />
-                                <span className="text-sm font-medium text-slate-700">The referred individual has consented to being contacted (if applicable)</span>
-                            </label>
-                            <label className="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" required checked={agreed.noMisleading} onChange={(e) => setAgreed({ ...agreed, noMisleading: e.target.checked })} className="mt-1 w-4 h-4 rounded border-slate-300 text-[#042f24]" />
-                                <span className="text-sm font-medium text-slate-700">No misleading or false representations were made</span>
-                            </label>
-                            <label className="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" required checked={agreed.complies} onChange={(e) => setAgreed({ ...agreed, complies: e.target.checked })} className="mt-1 w-4 h-4 rounded border-slate-300 text-[#042f24]" />
-                                <span className="text-sm font-medium text-slate-700">The referral complies with all applicable laws and Company policies</span>
-                            </label>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><Briefcase size={20} className="text-[#0a6c50]" /> Professional Background[cite: 2]</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Current Occupation *</label>
+                                <input type="text" name="currentOccupation" required value={formData.currentOccupation} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Company Name *</label>
+                                <input type="text" name="companyName" required value={formData.companyName} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Years of Experience *</label>
+                                <input type="number" name="yearsExperience" required value={formData.yearsExperience} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Relevant Experience *</label>
+                                <select name="relevantExperience" required value={formData.relevantExperience} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all">
+                                    <option value="">Select Domain...</option>
+                                    <option value="Mortgage / Lending">Mortgage / Lending</option>
+                                    <option value="Real Estate">Real Estate</option>
+                                    <option value="Business Consulting">Business Consulting</option>
+                                    <option value="Financial Services">Financial Services</option>
+                                    <option value="Insurance">Insurance</option>
+                                    <option value="Sales / Marketing">Sales / Marketing</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
                         </div>
                     </section>
 
-                    {/* SECTION 4: Signature */}
-                    <section className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <label className={labelClass}>Digital Signature (Type Full Name) *</label>
-                        <input required type="text" name="signature" placeholder="John Doe" value={formData.signature} onChange={handleInput} className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#042f24]/20 font-serif italic text-lg" />
-                        <p className="text-xs text-slate-500 mt-2">By typing your name, you are signing this application electronically.</p>
+                    {/* AGREEMENT & ACKNOWLEDGMENT */}
+                    <section className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-200 pb-2"><FileSignature size={20} className="text-[#0a6c50]" /> Agreement & Acknowledgment[cite: 2]</h3>
+
+                        <label className="flex items-start gap-4 cursor-pointer mb-6 group">
+                            <input type="checkbox" name="acknowledgment" checked={formData.acknowledgment} onChange={handleInputChange} className="mt-1 w-5 h-5 text-[#0a6c50] border-slate-300 rounded focus:ring-[#0a6c50] cursor-pointer" />
+                            <span className="text-slate-700 text-sm leading-relaxed group-hover:text-slate-900 transition-colors">
+                                I acknowledge that I am applying as an independent loan partner. Stratmire Capital Partners LLC handles all funding and processing. Compensation is based on funded deals and subject to agreement terms.[cite: 2]
+                            </span>
+                        </label>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-end">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Applicant Signature (Type Full Name) *</label>
+                                <input type="text" name="signature" required value={formData.signature} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-white font-medium text-slate-900" placeholder="Sign here..." />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
+                                <div className="px-4 py-3 border border-slate-200 bg-white text-slate-500 rounded-xl font-medium">
+                                    {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
-                    <button type="submit" disabled={isSubmitting} className="w-full bg-[#042f24] hover:bg-[#0a4233] text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg transition-all disabled:opacity-50">
-                        {isSubmitting ? "Submitting..." : "Submit Partner Application"} <ArrowRight size={20} />
+                    {/* ACCOUNT SECURITY */}
+                    <section className="pt-4 border-t border-slate-100">
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Create Account Password *</label>
+                        <input type="password" name="password" required minLength={6} value={formData.password} onChange={handleInputChange} className="w-full max-w-md px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0a6c50] outline-none bg-slate-50 focus:bg-white transition-all" placeholder="Secure password for portal access" />
+                    </section>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-[#0a6c50] text-white font-black text-lg py-4 rounded-xl hover:bg-[#085a42] transition-colors flex items-center justify-center gap-2 shadow-xl shadow-[#0a6c50]/20 disabled:opacity-70 mt-6"
+                    >
+                        {loading ? <Loader2 className="animate-spin" size={24} /> : "Submit Partner Application"}
+                        {!loading && <ArrowRight size={20} />}
                     </button>
                 </form>
+
+                <div className="bg-slate-50 text-center py-6 border-t border-slate-100">
+                    <p className="text-sm font-medium text-slate-500">
+                        Already have an approved account?{' '}
+                        <Link href="/partner/login" className="font-bold text-[#0a6c50] hover:underline">
+                            Log In
+                        </Link>
+                    </p>
+                </div>
+
             </div>
         </div>
     );
