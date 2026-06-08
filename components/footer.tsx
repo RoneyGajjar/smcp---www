@@ -19,7 +19,7 @@ const Footer = () => {
                             <h5 className="font-headline font-extrabold text-xs uppercase tracking-widest mb-8 text-secondary-fixed">Quick Links</h5>
                             <ul className="space-y-4 text-sm text-primary-fixed/80 font-body">
                                 <li><a className="hover:text-white transition-colors" href="./">Home</a></li>
-                                <li><a className="hover:text-white transition-colors" href="./loan-programs">Loan Programs</a></li>
+                                <li><a className="hover:text-white transition-colors" href="./loanprogram">Loan Programs</a></li>
                                 <li><a className="hover:text-white transition-colors" href="./how-it-works">How it Works</a></li>
                                 <li><a className="hover:text-white transition-colors" href="./contact">Contact Us</a></li>
                             </ul>
@@ -47,7 +47,7 @@ const Footer = () => {
                     </div>
                     <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                         <p className="text-[11px] text-primary-fixed/40 font-headline font-bold uppercase tracking-widest">
-                            © 2024 STRATMIRE CAPITAL PARTNERS. ALL RIGHTS RESERVED.
+                            © 2026 STRATMIRE CAPITAL PARTNERS. ALL RIGHTS RESERVED.
                         </p>
                         <div className="flex gap-8">
                             <span className="text-[10px] text-primary-fixed/40 font-bold uppercase tracking-widest">Equal Housing Lender</span>

@@ -5,7 +5,7 @@ import React from 'react';
 export default function LoanPrograms() {
   return (
     <div className="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container min-h-screen">
-      
+
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="vault-gradient text-white py-24 px-8 overflow-hidden relative">
@@ -23,10 +23,10 @@ export default function LoanPrograms() {
             </div>
             <div className="md:w-2/5 relative">
               <div className="aspect-[4/5] w-full rounded-lg overflow-hidden nexos-shadow">
-                <img 
-                  alt="Modern architectural detail" 
-                  className="w-full h-full object-cover grayscale contrast-125 opacity-80" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPTdV8OMqTOWPOwq4gPGcN9KgtYqi4tuYH6yatTnFU6WkxUN2mEGbrXcXIlMrYqSaSnaatltXohH84X2qqgZDfbA8Hg46KKYXaxQDdMevoV0NkkjLPA7eMlN_y4wpcZF3MxfSCbmo_huCyDx-wmT_g0kcAFZvvBiO0-VTUxs1NQVsy5MHxSvJ0WZeEuvcD1W5yJVVbO5XlNgwhLuuC57xFw05mUqClrMCuAn64LJwfXS3ke9jZONVhfikeWniElCAYeDOcNRfzYqU" 
+                <img
+                  alt="Modern architectural detail"
+                  className="w-full h-full object-cover grayscale contrast-125 opacity-80"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPTdV8OMqTOWPOwq4gPGcN9KgtYqi4tuYH6yatTnFU6WkxUN2mEGbrXcXIlMrYqSaSnaatltXohH84X2qqgZDfbA8Hg46KKYXaxQDdMevoV0NkkjLPA7eMlN_y4wpcZF3MxfSCbmo_huCyDx-wmT_g0kcAFZvvBiO0-VTUxs1NQVsy5MHxSvJ0WZeEuvcD1W5yJVVbO5XlNgwhLuuC57xFw05mUqClrMCuAn64LJwfXS3ke9jZONVhfikeWniElCAYeDOcNRfzYqU"
                 />
               </div>
             </div>
@@ -36,8 +36,8 @@ export default function LoanPrograms() {
         {/* Loan Programs Grid */}
         <section className="bg-surface py-32 px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-              
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 items-start">
+
               {/* Business Funding Card */}
               <div className="bg-white rounded-xl border border-outline-variant/30 p-8 lg:p-10 nexos-shadow space-y-10">
                 <div className="border-b border-outline-variant/30 pb-8">
@@ -48,12 +48,12 @@ export default function LoanPrograms() {
                     Tailored capital solutions for operational scaling and growth.
                   </p>
                 </div>
-                
+
                 <div className="space-y-4">
                   {/* 01 Working Capital Loans */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Working Capital Loans</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Business Line of Credit</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -69,12 +69,12 @@ export default function LoanPrograms() {
                   {/* 02 Business Credit Cards */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Business Credit Cards</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Equipment Financing</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
-                        High-limit corporate cards with premium rewards and specialized expense management tools for your team.
+                        Finance the purchase of essential business equipment with competitive rates and flexible terms.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
@@ -85,7 +85,7 @@ export default function LoanPrograms() {
                   {/* 03 Equipment Funding */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Equipment Funding</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Term Loan</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -101,12 +101,12 @@ export default function LoanPrograms() {
                   {/* 04 Truck & Heavy Equipment Loans */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Truck & Heavy Equipment Loans</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Invoice Financing / Factoring</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
-                        Specialized financing for fleets, logistics, and heavy construction machinery with flexible repayment terms.
+                        Turn your outstanding invoices into immediate working capital.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
@@ -117,12 +117,12 @@ export default function LoanPrograms() {
                   {/* 05 Business Lines of Credit */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Business Lines of Credit</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">SBA Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
-                        Revolving credit that gives you on-demand access to capital whenever opportunity or necessity arises.
+                        Access long-term financing with favorable rates and flexible terms through government-backed programs.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
@@ -133,12 +133,12 @@ export default function LoanPrograms() {
                   {/* 06 Term Loans */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Term Loans</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Business Acquisition Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
-                        Traditional lump-sum funding with fixed repayment schedules, ideal for major expansion projects.
+                        Secure the capital needed to purchase and expand your business with flexible and competitive funding options.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
@@ -149,12 +149,12 @@ export default function LoanPrograms() {
                   {/* 07 SBA Loan */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">SBA Loan</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Accounts Recievable Funding</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
-                        Government-backed financing offering favorable terms and lower down payments for small business growth.
+                        Convert unpaid invoices into immediate working capital. Ideal for B2B companies seeking predictable cash flow.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
@@ -165,7 +165,7 @@ export default function LoanPrograms() {
                   {/* 08 Business Acquisition Loans */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Business Acquisition Loans</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Merchant Cash Advance</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -181,7 +181,7 @@ export default function LoanPrograms() {
                   {/* 09 Accounts Receivable Funding */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Accounts Receivable Funding</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Working Capital Loan</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -197,7 +197,7 @@ export default function LoanPrograms() {
                   {/* 10 Gap Funding */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Gap Funding</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Business Credit Cards</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -222,17 +222,17 @@ export default function LoanPrograms() {
                     Institutional architecture for real estate and commercial assets.
                   </p>
                 </div>
-                
+
                 <div className="space-y-4">
                   {/* 01 1-4 Unit Investment Properties */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">1-4 Unit Investment Properties</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Hotel Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
-                        Scaling solutions for residential portfolios, focusing on long-term rental appreciation and DSCR models.
+                        Financing designed for the hospitality sector, supporting acquisitions, refinancing, and PIP (Property Improvement Plan) requirements.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
@@ -243,7 +243,7 @@ export default function LoanPrograms() {
                   {/* 02 Fix & Flip/Hold */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Fix & Flip/Hold</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Retail Strip Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -259,7 +259,7 @@ export default function LoanPrograms() {
                   {/* 03 Multi-Family Loan */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Multi-Family Loan</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Office Park Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -275,7 +275,7 @@ export default function LoanPrograms() {
                   {/* 04 Mixed Use Properties */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Mixed Use Properties</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Storage Facilites Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -291,7 +291,7 @@ export default function LoanPrograms() {
                   {/* 05 Commercial Properties */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Commercial Properties</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Mobile Home Park Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -307,7 +307,7 @@ export default function LoanPrograms() {
                   {/* 06 Land Loan */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Land Loan</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Light Industrial Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
@@ -323,12 +323,401 @@ export default function LoanPrograms() {
                   {/* 07 Construction Loan */}
                   <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
                     <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
-                      <h3 className="font-headline font-bold text-base text-primary">Construction Loan</h3>
+                      <h3 className="font-headline font-bold text-base text-primary">Warehouses Loans</h3>
                       <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
                     </summary>
                     <div className="px-5 pb-6">
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Mixed-Use Property Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Church Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Office Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Self Storage Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Appartment Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Adult Care Facilities Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Commercial Bridge Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+                </div>
+              </div>
+
+              {/* Construction Funding */}
+              <div className="bg-white rounded-xl border border-outline-variant/30 p-8 lg:p-10 nexos-shadow space-y-10">
+                <div className="border-b border-outline-variant/30 pb-8">
+                  <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight mb-3">
+                    Construction Funding
+                  </h2>
+                  <p className="text-on-surface-variant font-body text-lg">
+                    Capital for ground-up development, vertical construction, and horizontal lot development.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  {/* 01 Working Capital Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Construction-to-Permanent Loans (C2P)</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Bridge gaps in cash flow and cover everyday operational expenses with flexible, low-friction capital infusions.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 02 Business Credit Cards */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Standlone Construction Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        High-limit corporate cards with premium rewards and specialized expense management tools for your team.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 03 Equipment Funding */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Commercial Construction Loan</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Finance the tools you need to succeed, from medical technology to advanced manufacturing equipment.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 04 Truck & Heavy Equipment Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Renovation / Rehab Construction Loan</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Specialized financing for fleets, logistics, and heavy construction machinery with flexible repayment terms.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 05 Business Lines of Credit */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Ground Up Construction Loan</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Revolving credit that gives you on-demand access to capital whenever opportunity or necessity arises.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 06 Term Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Bridge Loan (Construction Related)</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Traditional lump-sum funding with fixed repayment schedules, ideal for major expansion projects.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl border border-outline-variant/30 p-8 lg:p-10 nexos-shadow space-y-10">
+                <div className="border-b border-outline-variant/30 pb-8">
+                  <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight mb-3">
+                    Investment Funding
+                  </h2>
+                  <p className="text-on-surface-variant font-body text-lg">
+                    Tailored capital solutions for operational scaling and growth.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  {/* 01 Working Capital Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">MultiFamily Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Bridge gaps in cash flow and cover everyday operational expenses with flexible, low-friction capital infusions.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 02 Business Credit Cards */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Portfolio Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        High-limit corporate cards with premium rewards and specialized expense management tools for your team.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 03 Equipment Funding */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Blanket Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Finance the tools you need to succeed, from medical technology to advanced manufacturing equipment.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 04 Truck & Heavy Equipment Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Appartment Building Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Specialized financing for fleets, logistics, and heavy construction machinery with flexible repayment terms.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 05 Business Lines of Credit */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Mixed-Use Property Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Revolving credit that gives you on-demand access to capital whenever opportunity or necessity arises.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 06 Term Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Land Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Traditional lump-sum funding with fixed repayment schedules, ideal for major expansion projects.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 07 SBA Loan */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Bridge Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Government-backed financing offering favorable terms and lower down payments for small business growth.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 08 Business Acquisition Loans */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">DSCR Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Funding designed to facilitate the purchase of an existing business or competitor to scale your footprint.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 09 Accounts Receivable Funding */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Fix And Flip / Fix & Hold Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Unlock the value of your outstanding invoices and get paid immediately instead of waiting for net terms.
+                      </p>
+                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                        Apply Now
+                      </button>
+                    </div>
+                  </details>
+
+                  {/* 10 Gap Funding */}
+                  <details className="group bg-surface rounded-lg overflow-hidden transition-all duration-300 border border-transparent hover:border-outline-variant/50">
+                    <summary className="flex items-center justify-between p-5 cursor-pointer select-none">
+                      <h3 className="font-headline font-bold text-base text-primary">Hard Money Loans</h3>
+                      <span className="material-symbols-outlined expand-icon text-outline transition-transform duration-300">expand_more</span>
+                    </summary>
+                    <div className="px-5 pb-6">
+                      <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
+                        Short-term liquidity solutions to bridge the period between immediate funding needs and permanent financing.
                       </p>
                       <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
