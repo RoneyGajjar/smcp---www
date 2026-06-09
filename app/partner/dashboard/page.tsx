@@ -1,29 +1,105 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     LayoutGrid, Users, DollarSign, FolderOpen, Settings,
     Bell, Copy, CheckCircle2, TrendingUp, ArrowRight,
-    Briefcase, Activity, Target
+    Activity, Target, UserPlus
 } from 'lucide-react';
-import { generateReferralCode } from '@/lib/utils';
+import { createClient } from '@/lib/supabase';
 
 export default function PartnerDashboard() {
     const [copied, setCopied] = useState(false);
-    const referralLink = generateReferralCode('roneyg@stratmire.com');
+    const [partnerCode, setPartnerCode] = useState('Loading...');
+    const [partnerName, setPartnerName] = useState('Loading...');
 
+    // Data States
+    const [referrals, setReferrals] = useState<any[]>([]);
+    const [referredPartners, setReferredPartners] = useState<any[]>([]);
+    const [isLoadingData, setIsLoadingData] = useState(true);
+
+    // Initialize Supabase Client
+    const supabase = createClient();
+
+    useEffect(() => {
+        async function fetchDashboardData() {
+            // 1. Get the currently logged-in user
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (user) {
+                // 2. Query the database for this specific user's partner code and name
+                const { data: partnerData } = await supabase
+                    .from('loan_partners')
+                    .select('partner_code, first_name, last_name')
+                    .eq('email', user.email)
+                    .single();
+
+                if (partnerData) {
+                    if (partnerData.partner_code) {
+                        setPartnerCode(partnerData.partner_code);
+                    } else {
+                        setPartnerCode('CODE-NOT-FOUND');
+                    }
+
+                    // Set the dynamic partner name
+                    const fullName = `${partnerData.first_name || ''} ${partnerData.last_name || ''}`.trim();
+                    setPartnerName(fullName || 'Partner');
+
+                    // 3. Fetch all borrowers who used this partner's code
+                    if (partnerData.partner_code) {
+                        const { data: borrowersData, error: borrowersError } = await supabase
+                            .from('borrowers')
+                            .select('*')
+                            .eq('referring_partner_code', partnerData.partner_code)
+                            .order('created_at', { ascending: false });
+
+                        if (!borrowersError && borrowersData) {
+                            setReferrals(borrowersData);
+                        }
+
+                        // 4. Fetch all PARTNERS who signed up using this partner's code
+                        const { data: partnersData, error: partnersError } = await supabase
+                            .from('loan_partners')
+                            .select('*')
+                            .eq('referring_partner_code', partnerData.partner_code)
+                            .order('created_at', { ascending: false });
+
+                        if (!partnersError && partnersData) {
+                            setReferredPartners(partnersData);
+                        }
+                    }
+
+                } else {
+                    setPartnerCode('CODE-NOT-FOUND');
+                    setPartnerName('Partner');
+                }
+            }
+            setIsLoadingData(false);
+        }
+
+        fetchDashboardData();
+    }, [supabase]);
+
+    // Construct the final URL dynamically
+    const referralLink = partnerCode === 'Loading...' || partnerCode === 'CODE-NOT-FOUND'
+        ? partnerCode
+        : `stratmire.cap/p/${partnerCode}`;
 
     const handleCopy = () => {
+        if (referralLink === 'Loading...' || referralLink === 'CODE-NOT-FOUND') return;
         navigator.clipboard.writeText(referralLink);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const recentReferrals = [
-        { initials: 'MA', name: 'Marcus Aurelius Dev Group', type: 'Commercial Real Estate', date: 'Oct 24, 2026', amount: '$2,450,000', status: 'UNDERWRITING', statusColor: 'bg-emerald-100 text-emerald-700' },
-        { initials: 'SL', name: 'Skyline Logistics LLC', type: 'Equipment Financing', date: 'Oct 21, 2026', amount: '$840,000', status: 'IN PROGRESS', statusColor: 'bg-slate-200 text-slate-700' },
-        { initials: 'VH', name: 'Vanguard Hospitality', type: 'Bridge Loan', date: 'Oct 18, 2026', amount: '$5,200,000', status: 'APPROVED', statusColor: 'bg-emerald-100 text-emerald-700' },
-        { initials: 'BT', name: 'Blue Tower Ventures', type: 'SBA 7(a)', date: 'Oct 12, 2026', amount: '$350,000', status: 'CLOSED', statusColor: 'bg-slate-900 text-white' },
-    ];
+    // Helper function to format the dates cleanly
+    const formatDate = (dateString: string) => {
+        if (!dateString) return 'Recently';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    // Calculate dynamic team progress (Capped at 100%)
+    const teamProgressPercentage = Math.min((referredPartners.length / 5) * 100, 100);
 
     return (
         <div className="min-h-screen bg-slate-50 flex font-sans">
@@ -80,7 +156,8 @@ export default function PartnerDashboard() {
                         </button>
                         <div className="flex items-center gap-3 border-l border-slate-200 pl-6">
                             <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-slate-900">Roney Gajjar</p>
+                                {/* DYNAMIC NAME ADDED HERE */}
+                                <p className="text-sm font-bold text-slate-900">{partnerName}</p>
                                 <p className="text-xs font-medium text-slate-500">Level 1 Starter</p>
                             </div>
                             <div className="w-10 h-10 rounded-full bg-slate-300 overflow-hidden border-2 border-white shadow-sm">
@@ -99,38 +176,42 @@ export default function PartnerDashboard() {
                         <div className="md:col-span-6 lg:col-span-6 bg-[#042f24] rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                             <p className="text-sm font-bold text-emerald-400/80 tracking-wider uppercase mb-2">Total Earnings</p>
-                            <h3 className="text-5xl font-black mb-4">$142,850.00</h3>
+                            <h3 className="text-5xl font-black mb-4">$0.00</h3>
                             <p className="flex items-center gap-2 text-sm font-medium text-emerald-400">
-                                <TrendingUp size={16} /> +12.5% from last month
+                                <TrendingUp size={16} /> Pending first closed deal
                             </p>
                         </div>
 
-                        {/* TOTAL REFERRALS */}
+                        {/* TOTAL REFERRALS (CLIENTS) */}
                         <div className="md:col-span-3 lg:col-span-3 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center mb-4">
                                 <Users size={20} className="text-slate-600" />
                             </div>
                             <div>
                                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Referrals</p>
-                                <h3 className="text-3xl font-black text-slate-900">124</h3>
+                                <h3 className="text-3xl font-black text-slate-900">
+                                    {isLoadingData ? '...' : referrals.length}
+                                </h3>
                             </div>
-                            <p className="text-xs font-bold text-[#0a6c50] mt-4">8 New this week</p>
+                            <p className="text-xs font-bold text-[#0a6c50] mt-4">Linked to your code</p>
                         </div>
 
-                        {/* ACTIVE APPS */}
+                        {/* REFERRED PARTNERS METRIC */}
                         <div className="md:col-span-3 lg:col-span-3 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between">
                             <div className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center mb-4">
-                                <Activity size={20} className="text-slate-600" />
+                                <UserPlus size={20} className="text-slate-600" />
                             </div>
                             <div>
-                                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Active Apps</p>
-                                <h3 className="text-3xl font-black text-slate-900">18</h3>
+                                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Partner Team</p>
+                                <h3 className="text-3xl font-black text-slate-900">
+                                    {isLoadingData ? '...' : referredPartners.length}
+                                </h3>
                             </div>
-                            <p className="text-xs font-medium text-slate-400 mt-4">Avg. 14 days processing</p>
+                            <p className="text-xs font-medium text-slate-400 mt-4">Active recruited members</p>
                         </div>
                     </div>
 
-                    {/* SECONDARY METRICS */}
+                    {/* SECONDARY METRICS & LINK */}
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                         {/* CLOSED LOANS */}
                         <div className="md:col-span-3 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between">
@@ -139,7 +220,7 @@ export default function PartnerDashboard() {
                             </div>
                             <div>
                                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Closed Loans</p>
-                                <h3 className="text-3xl font-black text-slate-900">42</h3>
+                                <h3 className="text-3xl font-black text-slate-900">0</h3>
                             </div>
                         </div>
 
@@ -147,66 +228,149 @@ export default function PartnerDashboard() {
                         <div className="md:col-span-9 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900">Partner Referral Link</h3>
-                                <p className="text-sm text-slate-500 mt-1">Share this unique URL with your network to track tier commissions automatically.</p>
+                                <p className="text-sm text-slate-500 mt-1">Share this unique URL or code <strong>({partnerCode})</strong> with your network to track tier commissions automatically.</p>
                             </div>
                             <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200 max-w-md w-full sm:w-auto">
                                 <code className="text-sm text-slate-700 px-3 truncate font-mono">{referralLink}</code>
                                 <button
                                     onClick={handleCopy}
-                                    className="bg-slate-900 hover:bg-slate-800 text-white p-2.5 rounded-lg transition-colors shrink-0 flex items-center justify-center"
+                                    className={`p-2.5 rounded-lg transition-colors shrink-0 flex items-center justify-center ${copied ? 'bg-emerald-100' : 'bg-slate-900 hover:bg-slate-800 text-white'}`}
                                     title="Copy link"
+                                    disabled={referralLink === 'Loading...' || referralLink === 'CODE-NOT-FOUND'}
                                 >
-                                    {copied ? <CheckCircle2 size={18} className="text-emerald-400" /> : <Copy size={18} />}
+                                    {copied ? <CheckCircle2 size={18} className="text-emerald-600" /> : <Copy size={18} />}
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {/* TABLE SECTION */}
+                    {/* DYNAMIC TABLE 1: REFERRED CLIENTS */}
                     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-                            <h3 className="text-lg font-bold text-slate-900">Recent Referrals</h3>
-                            <a href="#" className="text-sm font-bold text-[#0a6c50] hover:underline flex items-center gap-1">
-                                View Full History <ArrowRight size={16} />
-                            </a>
+                            <h3 className="text-lg font-bold text-slate-900">Your Referred Clients</h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead className="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider font-bold">
                                     <tr>
                                         <th className="px-6 py-4">Borrower Name</th>
-                                        <th className="px-6 py-4">Referral Date</th>
-                                        <th className="px-6 py-4">Loan Amount</th>
+                                        <th className="px-6 py-4">Submitted Date</th>
+                                        <th className="px-6 py-4">Contact Details</th>
                                         <th className="px-6 py-4">Current Status</th>
-                                        <th className="px-6 py-4 text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
-                                    {recentReferrals.map((ref, idx) => (
-                                        <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                            <td className="px-6 py-4 flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-xs shrink-0">
-                                                    {ref.initials}
-                                                </div>
-                                                <div>
-                                                    <p className="font-bold text-slate-900">{ref.name}</p>
-                                                    <p className="text-xs text-slate-500 font-medium">{ref.type}</p>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-slate-600 font-medium">{ref.date}</td>
-                                            <td className="px-6 py-4 font-bold text-slate-900">{ref.amount}</td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${ref.statusColor}`}>
-                                                    {ref.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <button className="text-slate-400 hover:text-slate-900 transition-colors">
-                                                    <LayoutGrid size={18} />
-                                                </button>
+                                    {isLoadingData ? (
+                                        <tr>
+                                            <td colSpan={4} className="px-6 py-8 text-center text-slate-500 font-medium">
+                                                Loading referrals...
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : referrals.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={4} className="px-6 py-12 text-center">
+                                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-400 mb-3">
+                                                    <Users size={24} />
+                                                </div>
+                                                <p className="font-bold text-slate-900 text-lg">No client referrals yet</p>
+                                                <p className="text-slate-500 mt-1">Share your link to get started.</p>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        referrals.map((ref) => {
+                                            const initials = `${ref.first_name?.[0] || ''}${ref.last_name?.[0] || ''}`.toUpperCase();
+                                            return (
+                                                <tr key={ref.id} className="hover:bg-slate-50/50 transition-colors">
+                                                    <td className="px-6 py-4 flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded bg-[#0a6c50]/10 text-[#0a6c50] font-bold flex items-center justify-center text-xs shrink-0">
+                                                            {initials || '?'}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-bold text-slate-900">{ref.first_name} {ref.last_name}</p>
+                                                            <p className="text-xs text-slate-500 font-medium">Application Received</p>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-slate-600 font-medium">{formatDate(ref.created_at)}</td>
+                                                    <td className="px-6 py-4">
+                                                        <p className="font-medium text-slate-900">{ref.email}</p>
+                                                        <p className="text-xs text-slate-500">{ref.phone}</p>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <span className="px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-emerald-100 text-emerald-700">
+                                                            RECEIVED
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* DYNAMIC TABLE 2: REFERRED PARTNERS (TEAM) */}
+                    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-slate-900">Your Referred Partners (Team)</h3>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider font-bold">
+                                    <tr>
+                                        <th className="px-6 py-4">Partner Name</th>
+                                        <th className="px-6 py-4">Business Name</th>
+                                        <th className="px-6 py-4">Joined Date</th>
+                                        <th className="px-6 py-4">Approval Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {isLoadingData ? (
+                                        <tr>
+                                            <td colSpan={4} className="px-6 py-8 text-center text-slate-500 font-medium">
+                                                Loading partners...
+                                            </td>
+                                        </tr>
+                                    ) : referredPartners.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={4} className="px-6 py-12 text-center">
+                                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-400 mb-3">
+                                                    <UserPlus size={24} />
+                                                </div>
+                                                <p className="font-bold text-slate-900 text-lg">No partners recruited yet</p>
+                                                <p className="text-slate-500 mt-1">Invite industry professionals to build your team and reach Level 2.</p>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        referredPartners.map((partner) => {
+                                            const initials = `${partner.first_name?.[0] || ''}${partner.last_name?.[0] || ''}`.toUpperCase();
+                                            const isApproved = partner.status === 'APPROVED';
+                                            return (
+                                                <tr key={partner.id} className="hover:bg-slate-50/50 transition-colors">
+                                                    <td className="px-6 py-4 flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded bg-slate-200 text-slate-600 font-bold flex items-center justify-center text-xs shrink-0">
+                                                            {initials || '?'}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-bold text-slate-900">{partner.first_name} {partner.last_name}</p>
+                                                            <p className="text-xs text-slate-500 font-medium">{partner.email}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <p className="font-medium text-slate-900">{partner.business_name || 'N/A'}</p>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-slate-600 font-medium">
+                                                        {formatDate(partner.created_at)}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${isApproved ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                                                            {partner.status || 'PENDING'}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -245,25 +409,28 @@ export default function PartnerDashboard() {
                                 </p>
 
                                 <div className="space-y-4">
-                                    {/* Goal 1: Team Members */}
+                                    {/* Goal 1: Team Members - NOW DYNAMICALLY DRIVEN */}
                                     <div>
                                         <div className="flex justify-between text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">
-                                            <span>Team Built (Current: 3)</span>
+                                            <span>Team Built (Current: {isLoadingData ? '...' : referredPartners.length})</span>
                                             <span>Target: 5 Members</span>
                                         </div>
                                         <div className="w-full bg-black/40 rounded-full h-2">
-                                            <div className="bg-gradient-to-r from-[#BFA054] to-[#F1DE8B] h-2 rounded-full" style={{ width: '60%' }}></div>
+                                            <div
+                                                className="bg-gradient-to-r from-[#BFA054] to-[#F1DE8B] h-2 rounded-full transition-all duration-1000"
+                                                style={{ width: `${teamProgressPercentage}%` }}
+                                            ></div>
                                         </div>
                                     </div>
 
                                     {/* Goal 2: Closed Deals */}
                                     <div>
                                         <div className="flex justify-between text-xs font-bold text-[#D4AF37] uppercase tracking-wider mb-2">
-                                            <span>Funded Deals (Current: 2)</span>
+                                            <span>Funded Deals (Current: 0)</span>
                                             <span>Target: 4 Deals / Yr</span>
                                         </div>
                                         <div className="w-full bg-black/40 rounded-full h-2">
-                                            <div className="bg-gradient-to-r from-[#BFA054] to-[#F1DE8B] h-2 rounded-full" style={{ width: '50%' }}></div>
+                                            <div className="bg-gradient-to-r from-[#BFA054] to-[#F1DE8B] h-2 rounded-full" style={{ width: '0%' }}></div>
                                         </div>
                                     </div>
                                 </div>
