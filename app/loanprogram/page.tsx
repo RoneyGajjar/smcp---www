@@ -36,7 +36,7 @@ export default function LoanPrograms() {
         {/* Loan Programs Grid */}
         <section className="bg-surface py-32 px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-6 items-start">
 
               {/* Business Funding Card */}
               <div className="bg-white rounded-xl border border-outline-variant/30 p-8 lg:p-10 nexos-shadow space-y-10">

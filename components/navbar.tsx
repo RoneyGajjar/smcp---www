@@ -28,7 +28,7 @@ export default async function Navbar() {
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/">Home</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/about">About Us</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/loanprogram">Loan Programs</Link>
-              <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/become-partner">Become a Partner</Link>
+              <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/become-partner/team">Become a Partner</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/mortgagecalc">Mortgage Calculator</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/business-service">Business Services</Link>
               <Link className="text-slate-300/80 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm uppercase" href="/contact">Contact Us</Link>

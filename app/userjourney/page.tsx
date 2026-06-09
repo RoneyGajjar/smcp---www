@@ -42,6 +42,9 @@ export default function BorrowerInfoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [borrowerId, setBorrowerId] = useState<string | null>(null)
 
+  // Referral State
+  const [referralCode, setReferralCode] = useState("")
+
   // Demographics & Consent State
   const [hasOtherNames, setHasOtherNames] = useState("no")
   const [creditConsent, setCreditConsent] = useState("yes")
@@ -118,20 +121,16 @@ export default function BorrowerInfoPage() {
     email: "", phone: "", ssn: "", birthDate: "",
   })
 
-  // 1. HYDRATION: Load saved data when the component mounts
   // 1. HYDRATION & SMART ROUTING
   useEffect(() => {
-    // --- NEW SMART ROUTING LOGIC ---
     const params = new URLSearchParams(window.location.search);
     const isForceNew = params.get('new') === 'true';
     const savedLocalId = localStorage.getItem('currentApplicationId');
 
-    // If they have an existing application AND didn't explicitly request a new one, send them to the dashboard
     if (savedLocalId && !isForceNew) {
       router.push('/dashboard');
       return;
     }
-    // -------------------------------
 
     const savedId = sessionStorage.getItem('activeBorrowerId');
     if (savedId) setBorrowerId(savedId);
@@ -145,6 +144,8 @@ export default function BorrowerInfoPage() {
       setDependents(parsed.dependents || []);
       setAdditionalIncomes(parsed.additionalIncomes || []);
       setMailingAddress(parsed.mailingAddress || { street: "", unit: "", city: "", state: "", zip: "" });
+
+      setReferralCode(parsed.referralCode || "");
 
       setHasOtherNames(parsed.hasOtherNames || "no");
       setHasDependents(parsed.hasDependents || "no");
@@ -180,7 +181,7 @@ export default function BorrowerInfoPage() {
   // 2. PERSISTENCE: Save to browser memory automatically as they type
   useEffect(() => {
     const draft = {
-      formData, addresses, jobs, dependents, additionalIncomes, mailingAddress,
+      formData, addresses, jobs, dependents, additionalIncomes, mailingAddress, referralCode,
       hasOtherNames, hasDependents, hasBeenEmployed, hasAdditionalIncome,
       hasMilitaryService, militaryStatus, militaryExpirationDate,
       hasEducation, educationFormat, isHudApproved, hudAgencyId, educationProgramName, educationCompletionDate,
@@ -189,7 +190,7 @@ export default function BorrowerInfoPage() {
     };
     sessionStorage.setItem('borrowerInfoDraft', JSON.stringify(draft));
   }, [
-    formData, addresses, jobs, dependents, additionalIncomes, mailingAddress,
+    formData, addresses, jobs, dependents, additionalIncomes, mailingAddress, referralCode,
     hasOtherNames, hasDependents, hasBeenEmployed, hasAdditionalIncome,
     hasMilitaryService, militaryStatus, militaryExpirationDate,
     hasEducation, educationFormat, isHudApproved, hudAgencyId, educationProgramName, educationCompletionDate,
@@ -381,7 +382,10 @@ export default function BorrowerInfoPage() {
       employment_history: hasBeenEmployed === "yes" ? jobs : [],
 
       has_additional_income: hasAdditionalIncome === "yes",
-      additional_income_sources: hasAdditionalIncome === "yes" ? additionalIncomes : []
+      additional_income_sources: hasAdditionalIncome === "yes" ? additionalIncomes : [],
+
+      // --- NEW REFERRAL CODE MAPPING ---
+      referring_partner_code: referralCode ? referralCode.toUpperCase() : null
     };
 
     if (borrowerId) {
@@ -492,6 +496,77 @@ export default function BorrowerInfoPage() {
                 </FieldGroup>
               </div>
             )}
+
+            {/* CONTACT INFO */}
+            <FieldGroup className="grid max-w-xl grid-cols-2 pt-6 border-t border-outline-variant/20 mt-6">
+              <Field>
+                <FieldLabel htmlFor="fieldgroup-email">Email <span className="text-destructive">*</span></FieldLabel>
+                <Input id="fieldgroup-email" type="email" placeholder="name@example.com" required value={formData.email} onChange={handleInputChange} />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="fieldgroup-phone">Phone <span className="text-destructive">*</span></FieldLabel>
+                <Input id="fieldgroup-phone" type="tel" placeholder="(123) 456-7890" required value={formData.phone} onChange={handleInputChange} />
+              </Field>
+            </FieldGroup>
+
+            {/* REFERRAL INFORMATION */}
+            <div className="border-t border-outline-variant/20 pt-8 space-y-4 mt-6">
+              <h2 className="text-lg font-bold text-primary">Were you referred by a Stratmire Partner?</h2>
+              <Field className="max-w-sm">
+                <FieldLabel htmlFor="referral-code">Partner Referral Code <span className="text-sm font-normal text-on-surface-variant">(Optional)</span></FieldLabel>
+                <Input
+                  id="referral-code"
+                  type="text"
+                  placeholder="e.g. X79Y2Z"
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                  className="uppercase font-mono tracking-wider"
+                />
+                <span className="text-xs text-on-surface-variant mt-1 block">Enter the 6-digit code provided by your broker or partner.</span>
+              </Field>
+            </div>
+
+            {/* DEMOGRAPHICS */}
+            <h2 className="text-lg font-bold text-primary border-t border-outline-variant/20 pt-6">What&apos;s your birth date?</h2>
+            <Field>
+              <Input id="birth-date" type="date" required value={formData.birthDate} onChange={handleInputChange} className="max-w-xs" />
+            </Field>
+
+            <h2 className="text-lg font-bold text-primary">What&apos;s your citizenship status?</h2>
+            <FieldSet className="w-full pt-2">
+              <RadioGroup value={citizenship} onValueChange={setCitizenship} className="flex flex-col gap-4" required>
+                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${citizenship === 'us-citizen' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
+                  <RadioGroupItem value="us-citizen" id="citizen-us" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
+                  <span className="font-normal leading-none text-primary">U.S. Citizen</span>
+                </label>
+                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${citizenship === 'permanent-resident' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
+                  <RadioGroupItem value="permanent-resident" id="citizen-permanent" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
+                  <span className="font-normal leading-none text-primary">Permanent Resident Alien</span>
+                </label>
+                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${citizenship === 'non-resident' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
+                  <RadioGroupItem value="non-resident" id="citizen-nonresident" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
+                  <span className="font-normal leading-none text-primary">Non-Permanent Resident Alien</span>
+                </label>
+              </RadioGroup>
+            </FieldSet>
+
+            <h2 className="text-lg font-bold text-primary">What&apos;s your Marital status?</h2>
+            <FieldSet className="w-full max-w-xs pt-2">
+              <RadioGroup value={maritalStatus} onValueChange={setMaritalStatus} className="flex flex-col gap-4" required>
+                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${maritalStatus === 'married' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
+                  <RadioGroupItem value="married" id="marital-married" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
+                  <span className="font-normal leading-none text-primary">Married</span>
+                </label>
+                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${maritalStatus === 'separated' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
+                  <RadioGroupItem value="separated" id="marital-separated" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
+                  <span className="font-normal leading-none text-primary">Separated</span>
+                </label>
+                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${maritalStatus === 'unmarried' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
+                  <RadioGroupItem value="unmarried" id="marital-unmarried" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
+                  <span className="font-normal leading-none text-primary">Unmarried</span>
+                </label>
+              </RadioGroup>
+            </FieldSet>
 
             {/* ADDRESS HISTORY SECTION */}
             <h2 className="text-2xl font-black text-primary border-t border-outline-variant/20 pt-8">{formData.firstName || "Roney"}&apos;s Addresses</h2>
@@ -1186,60 +1261,6 @@ export default function BorrowerInfoPage() {
                 </div>
               </div>
             </div>
-
-            {/* CONTACT INFO */}
-            <FieldGroup className="grid max-w-xl grid-cols-2 pt-6 border-t border-outline-variant/20 mt-6">
-              <Field>
-                <FieldLabel htmlFor="fieldgroup-email">Email <span className="text-destructive">*</span></FieldLabel>
-                <Input id="fieldgroup-email" type="email" placeholder="name@example.com" required value={formData.email} onChange={handleInputChange} />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="fieldgroup-phone">Phone <span className="text-destructive">*</span></FieldLabel>
-                <Input id="fieldgroup-phone" type="tel" placeholder="(123) 456-7890" required value={formData.phone} onChange={handleInputChange} />
-              </Field>
-            </FieldGroup>
-
-            {/* DEMOGRAPHICS */}
-            <h2 className="text-lg font-bold text-primary border-t border-outline-variant/20 pt-6">What&apos;s your birth date?</h2>
-            <Field>
-              <Input id="birth-date" type="date" required value={formData.birthDate} onChange={handleInputChange} className="max-w-xs" />
-            </Field>
-
-            <h2 className="text-lg font-bold text-primary">What&apos;s your citizenship status?</h2>
-            <FieldSet className="w-full pt-2">
-              <RadioGroup value={citizenship} onValueChange={setCitizenship} className="flex flex-col gap-4" required>
-                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${citizenship === 'us-citizen' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
-                  <RadioGroupItem value="us-citizen" id="citizen-us" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
-                  <span className="font-normal leading-none text-primary">U.S. Citizen</span>
-                </label>
-                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${citizenship === 'permanent-resident' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
-                  <RadioGroupItem value="permanent-resident" id="citizen-permanent" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
-                  <span className="font-normal leading-none text-primary">Permanent Resident Alien</span>
-                </label>
-                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${citizenship === 'non-resident' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
-                  <RadioGroupItem value="non-resident" id="citizen-nonresident" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
-                  <span className="font-normal leading-none text-primary">Non-Permanent Resident Alien</span>
-                </label>
-              </RadioGroup>
-            </FieldSet>
-
-            <h2 className="text-lg font-bold text-primary">What&apos;s your Marital status?</h2>
-            <FieldSet className="w-full max-w-xs pt-2">
-              <RadioGroup value={maritalStatus} onValueChange={setMaritalStatus} className="flex flex-col gap-4" required>
-                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${maritalStatus === 'married' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
-                  <RadioGroupItem value="married" id="marital-married" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
-                  <span className="font-normal leading-none text-primary">Married</span>
-                </label>
-                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${maritalStatus === 'separated' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
-                  <RadioGroupItem value="separated" id="marital-separated" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
-                  <span className="font-normal leading-none text-primary">Separated</span>
-                </label>
-                <label className={`flex items-center gap-3 px-6 py-3 rounded-md border transition-all cursor-pointer ${maritalStatus === 'unmarried' ? 'border-primary bg-primary/5' : 'bg-surface-container-high border-outline-variant/30 hover:brightness-95'}`}>
-                  <RadioGroupItem value="unmarried" id="marital-unmarried" className="shrink-0 h-4 w-4 border border-primary text-primary focus:ring-secondary" />
-                  <span className="font-normal leading-none text-primary">Unmarried</span>
-                </label>
-              </RadioGroup>
-            </FieldSet>
 
             {/* DEPENDENTS SECTION */}
             <h2 className="text-lg font-bold text-primary border-t border-outline-variant/20 pt-6">Does the borrower have any dependents?</h2>

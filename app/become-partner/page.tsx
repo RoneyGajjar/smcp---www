@@ -117,7 +117,7 @@ export default function BecomePartnerPage() {
 
             <div className="max-w-3xl w-full mb-8 text-center space-y-2">
                 <h1 className="text-4xl font-black text-[#042f24] uppercase tracking-tight">Stratmire Capital Partners LLC</h1>
-                <p className="text-lg font-medium text-slate-500">Capital without limits. Solutions without compromise.[cite: 2]</p>
+                <p className="text-lg font-medium text-slate-500">Capital without limits. Solutions without compromise. </p>
             </div>
 
             <div className="max-w-3xl w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
@@ -126,7 +126,7 @@ export default function BecomePartnerPage() {
                     <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20 backdrop-blur-sm">
                         <Building2 size={32} className="text-white" />
                     </div>
-                    <h2 className="text-2xl font-black tracking-tight">LOAN PARTNER APPLICATION FORM[cite: 2]</h2>
+                    <h2 className="text-2xl font-black tracking-tight">LOAN PARTNER APPLICATION FORM </h2>
                 </div>
 
                 {error && (
@@ -139,7 +139,7 @@ export default function BecomePartnerPage() {
 
                     {/* APPLICANT INFORMATION */}
                     <section>
-                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><User size={20} className="text-[#0a6c50]" /> Applicant Information[cite: 2]</h3>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><User size={20} className="text-[#0a6c50]" /> Applicant Information </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Legal Name *</label>
@@ -178,7 +178,7 @@ export default function BecomePartnerPage() {
 
                     {/* COMPLIANCE & DISCLOSURES */}
                     <section>
-                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><ShieldAlert size={20} className="text-[#0a6c50]" /> Compliance & Disclosures[cite: 2]</h3>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><ShieldAlert size={20} className="text-[#0a6c50]" /> Compliance & Disclosures </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                                 <label className="block text-sm font-bold text-slate-700 mb-3">Felony or Financial Crime History? *</label>
@@ -199,7 +199,7 @@ export default function BecomePartnerPage() {
 
                     {/* PROFESSIONAL BACKGROUND */}
                     <section>
-                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><Briefcase size={20} className="text-[#0a6c50]" /> Professional Background[cite: 2]</h3>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><Briefcase size={20} className="text-[#0a6c50]" /> Professional Background </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Current Occupation *</label>
@@ -231,12 +231,12 @@ export default function BecomePartnerPage() {
 
                     {/* AGREEMENT & ACKNOWLEDGMENT */}
                     <section className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-200 pb-2"><FileSignature size={20} className="text-[#0a6c50]" /> Agreement & Acknowledgment[cite: 2]</h3>
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-200 pb-2"><FileSignature size={20} className="text-[#0a6c50]" /> Agreement & Acknowledgment </h3>
 
                         <label className="flex items-start gap-4 cursor-pointer mb-6 group">
                             <input type="checkbox" name="acknowledgment" checked={formData.acknowledgment} onChange={handleInputChange} className="mt-1 w-5 h-5 text-[#0a6c50] border-slate-300 rounded focus:ring-[#0a6c50] cursor-pointer" />
                             <span className="text-slate-700 text-sm leading-relaxed group-hover:text-slate-900 transition-colors">
-                                I acknowledge that I am applying as an independent loan partner. Stratmire Capital Partners LLC handles all funding and processing. Compensation is based on funded deals and subject to agreement terms.[cite: 2]
+                                I acknowledge that I am applying as an independent loan partner. Stratmire Capital Partners LLC handles all funding and processing. Compensation is based on funded deals and subject to agreement terms.
                             </span>
                         </label>
 
