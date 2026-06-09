@@ -1,8 +1,7 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, MapPin, Phone, Calendar } from 'lucide-react';
 import { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
 
 interface MeetingSelectionModalProps {
     isOpen: boolean;
@@ -10,14 +9,19 @@ interface MeetingSelectionModalProps {
 }
 
 export default function MeetingSelectionModal({ isOpen, onClose }: MeetingSelectionModalProps) {
-    if (!isOpen) return null;
+
+    // 1. HOOKS ALWAYS GO FIRST (Before any conditional returns)
     useEffect(() => {
         (async function () {
             const cal = await getCalApi({ "namespace": "15min" });
             cal("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
         })();
-    }, [])
+    }, []);
 
+    // 2. NOW we can safely exit if the modal is closed
+    if (!isOpen) return null;
+
+    // 3. RENDER THE UI
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div

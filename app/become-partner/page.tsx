@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { Building2, ArrowRight, Loader2, User, ShieldAlert, Briefcase, FileSignature } from 'lucide-react';
 import Link from 'next/link';
+import { generateReferralCode } from '@/lib/utils';
 
 export default function BecomePartnerPage() {
     const router = useRouter();
@@ -94,6 +95,7 @@ export default function BecomePartnerPage() {
                         company_name: formData.companyName,
                         years_experience: formData.yearsExperience,
                         relevant_experience: formData.relevantExperience,
+                        partner_code: generateReferralCode(formData.email),
 
                         status: 'PENDING'
                     }]);
@@ -271,7 +273,7 @@ export default function BecomePartnerPage() {
                 <div className="bg-slate-50 text-center py-6 border-t border-slate-100">
                     <p className="text-sm font-medium text-slate-500">
                         Already have an approved account?{' '}
-                        <Link href="/partner/login" className="font-bold text-[#0a6c50] hover:underline">
+                        <Link href="/become-partner/login" className="font-bold text-[#0a6c50] hover:underline">
                             Log In
                         </Link>
                     </p>
