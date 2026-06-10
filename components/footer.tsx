@@ -27,10 +27,10 @@ const Footer = () => {
                         <div>
                             <h5 className="font-headline font-extrabold text-xs uppercase tracking-widest mb-8 text-secondary-fixed">Legal</h5>
                             <ul className="space-y-4 text-sm text-primary-fixed/80 font-body">
-                                <li><a className="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
-                                <li><a className="hover:text-white transition-colors" href="#">Terms of Service</a></li>
-                                <li><a className="hover:text-white transition-colors" href="#">Licensing Info</a></li>
-                                <li><a className="hover:text-white transition-colors" href="#">Security</a></li>
+                                <li><a className="hover:text-white transition-colors" href="./privacy">Privacy Policy</a></li>
+                                <li><a className="hover:text-white transition-colors" href="./terms">Terms of Service</a></li>
+                                {/* <li><a className="hover:text-white transition-colors" href="#">Licensing Info</a></li> */}
+                                <li><a className="hover:text-white transition-colors" href="./accessibility">Security</a></li>
                             </ul>
                         </div>
                         <div>

@@ -1,14 +1,17 @@
+"use client"
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function LoanPrograms() {
+  const router = useRouter();
   return (
     <div className="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container min-h-screen">
 
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="vault-gradient text-white py-24 px-8 overflow-hidden relative">
+        {/* <section className="vault-gradient text-white py-24 px-8 overflow-hidden relative">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
             <div className="md:w-3/5 z-10">
               <span className="text-secondary-fixed font-headline font-bold tracking-[0.2em] text-xs uppercase mb-4 block">
@@ -31,7 +34,45 @@ export default function LoanPrograms() {
               </div>
             </div>
           </div>
+        </section> */}
+        <section className="w-full bg-[#042f24] py-20 lg:py-28 px-4 sm:px-8 relative overflow-hidden font-sans">
+          {/* Subtle background abstract glow */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none -translate-y-1/4 translate-x-1/4"></div>
+
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+
+            {/* Left Side Content */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <span className="text-teal-400 font-bold tracking-[0.2em] text-xs uppercase block">
+                Institutional Grade Funding
+              </span>
+              <h1 className="text-white font-black text-4xl sm:text-5xl md:text-6xl tracking-tight leading-none">
+                The Modern Standard <br />
+                for <span className="text-teal-400 font-extrabold">Capital Placement.</span>
+              </h1>
+              <p className="text-emerald-50/70 font-medium text-base sm:text-lg max-w-xl leading-relaxed">
+                Strategic liquidity solutions for high-performance enterprises and
+                real estate visionaries. We provide the architecture for your growth.
+              </p>
+            </div>
+
+            {/* Right Side Image Box */}
+            <div className="lg:col-span-5 w-full aspect-[4/5] sm:aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-emerald-500/10 relative group">
+              {/* Green tint mix-blend overlay to perfectly match your navbar color scheme */}
+              <div className="absolute inset-0 bg-[#042f24]/30 mix-blend-multiply z-10 transition-colors duration-300 group-hover:bg-[#042f24]/10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#042f24]/40 via-transparent to-transparent z-10" />
+
+              <img
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                alt="Stratmire Commercial Real Estate Architecture Portfolio"
+                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" />
+            </div>
+
+          </div>
         </section>
+
+
+
 
         {/* Loan Programs Grid */}
         <section className="bg-surface py-32 px-8">
@@ -60,7 +101,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Bridge gaps in cash flow and cover everyday operational expenses with flexible, low-friction capital infusions.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -76,7 +117,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Finance the purchase of essential business equipment with competitive rates and flexible terms.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -92,7 +133,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Finance the tools you need to succeed, from medical technology to advanced manufacturing equipment.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -108,7 +149,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Turn your outstanding invoices into immediate working capital.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -124,7 +165,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Access long-term financing with favorable rates and flexible terms through government-backed programs.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -140,7 +181,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Secure the capital needed to purchase and expand your business with flexible and competitive funding options.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -156,7 +197,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Convert unpaid invoices into immediate working capital. Ideal for B2B companies seeking predictable cash flow.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -172,7 +213,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Funding designed to facilitate the purchase of an existing business or competitor to scale your footprint.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -188,7 +229,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Unlock the value of your outstanding invoices and get paid immediately instead of waiting for net terms.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -204,7 +245,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Short-term liquidity solutions to bridge the period between immediate funding needs and permanent financing.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/business-loan')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -234,7 +275,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Financing designed for the hospitality sector, supporting acquisitions, refinancing, and PIP (Property Improvement Plan) requirements.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -250,7 +291,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Short-term bridge capital for acquisition and renovation of distressed properties with high-ROI potential.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -266,7 +307,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Institutional grade financing for 5+ unit apartment complexes, offering competitive leverage and terms.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -282,7 +323,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Capital for properties combining residential and commercial space, tailored to unique urban development needs.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -298,7 +339,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Financing for retail, office, and industrial assets with sophisticated debt structures for high-value acquisitions.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -314,7 +355,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Raw land or improved lot financing for future development or tactical asset holding.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -330,7 +371,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -345,7 +386,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -360,7 +401,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -375,7 +416,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -390,7 +431,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -406,7 +447,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -421,7 +462,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -436,7 +477,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Ground-up development financing for commercial and large-scale residential projects with interest-only periods.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -466,7 +507,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Bridge gaps in cash flow and cover everyday operational expenses with flexible, low-friction capital infusions.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -482,7 +523,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         High-limit corporate cards with premium rewards and specialized expense management tools for your team.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -498,7 +539,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Finance the tools you need to succeed, from medical technology to advanced manufacturing equipment.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -514,7 +555,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Specialized financing for fleets, logistics, and heavy construction machinery with flexible repayment terms.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -530,7 +571,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Revolving credit that gives you on-demand access to capital whenever opportunity or necessity arises.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -546,7 +587,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Traditional lump-sum funding with fixed repayment schedules, ideal for major expansion projects.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -575,7 +616,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Bridge gaps in cash flow and cover everyday operational expenses with flexible, low-friction capital infusions.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -591,7 +632,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         High-limit corporate cards with premium rewards and specialized expense management tools for your team.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -607,7 +648,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Finance the tools you need to succeed, from medical technology to advanced manufacturing equipment.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -623,7 +664,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Specialized financing for fleets, logistics, and heavy construction machinery with flexible repayment terms.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -639,7 +680,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Revolving credit that gives you on-demand access to capital whenever opportunity or necessity arises.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -655,7 +696,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Traditional lump-sum funding with fixed repayment schedules, ideal for major expansion projects.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -671,7 +712,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Government-backed financing offering favorable terms and lower down payments for small business growth.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -687,7 +728,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Funding designed to facilitate the purchase of an existing business or competitor to scale your footprint.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -703,7 +744,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Unlock the value of your outstanding invoices and get paid immediately instead of waiting for net terms.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -719,7 +760,7 @@ export default function LoanPrograms() {
                       <p className="text-gray-600 font-body text-sm leading-relaxed mb-6">
                         Short-term liquidity solutions to bridge the period between immediate funding needs and permanent financing.
                       </p>
-                      <button className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
+                      <button onClick={() => router.push('/userjourney')} className="bg-secondary text-on-secondary px-6 py-2.5 rounded-md font-headline font-bold text-[11px] uppercase tracking-widest hover:brightness-110 transition-all">
                         Apply Now
                       </button>
                     </div>
