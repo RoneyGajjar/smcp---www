@@ -4,6 +4,7 @@ import React from 'react';
 import { MapPin, Phone, Mail, ArrowRight, Map } from 'lucide-react';
 
 export default function ContactPage() {
+  const TALLY_FORM_URL = "https://tally.so/r/5BO146";
   return (
     <div className="bg-slate-50 text-slate-900 font-sans min-h-screen">
 
@@ -40,8 +41,8 @@ export default function ContactPage() {
 
           {/* Contact Form (Left) */}
           <div className="lg:col-span-7 bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-slate-200">
-            <h2 className="font-black text-3xl text-slate-900 mb-8 tracking-tight">Inquiry Submission</h2>
-            <form className="space-y-8">
+            {/* <h2 className="font-black text-3xl text-slate-900 mb-8 tracking-tight">Inquiry Submission</h2> */}
+            {/* <form className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -105,7 +106,16 @@ export default function ContactPage() {
                   <ArrowRight size={18} />
                 </button>
               </div>
-            </form>
+            </form> */}
+            <iframe
+              src={`${TALLY_FORM_URL}?transparentBackground=1`}
+              height="100%"
+              className="flex-1 w-full border-none min-h-[700px]"
+              title="Stratmire Capital Application Form"
+
+              allowFullScreen
+              allow="autoplay; fullscreen; microphone; camera"
+            ></iframe>
           </div>
 
           {/* Sidebar Info (Right) */}
@@ -160,17 +170,7 @@ export default function ContactPage() {
 
             {/* Map Placeholder */}
             <div className="relative h-48 rounded-2xl overflow-hidden shadow-sm group">
-              <img
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                alt="Map location Melbourne FL"
-                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800&auto=format&fit=crop"
-              />
-              <div className="absolute inset-0 bg-[#042f24]/60 flex items-center justify-center transition-colors duration-300 group-hover:bg-[#042f24]/40">
-                <button className="bg-white text-[#042f24] px-6 py-3 rounded-xl font-bold text-xs flex items-center gap-2 hover:bg-slate-100 transition-all tracking-widest uppercase shadow-lg">
-                  <Map size={16} />
-                  View on Map
-                </button>
-              </div>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2438.331421552302!2d-80.67119461947686!3d28.079614947868635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88de0e795214a143%3A0xbd116df1b7539709!2s3020%20W%20New%20Haven%20Ave%20%23133%2C%20West%20Melbourne%2C%20FL%2032904%2C%20USA!5e0!3m2!1sen!2sin!4v1781251124712!5m2!1sen!2sin" width="400" height="300" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
             </div>
           </div>
 

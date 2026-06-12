@@ -1,6 +1,7 @@
 "use client"
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
+import { NewButton } from '@/components/ui/new-button';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -773,18 +774,19 @@ export default function LoanPrograms() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 px-8 bg-primary-container text-white">
+        <section className="py-24 px-8 bg-primary-container text-gray-900">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="font-headline font-extrabold text-4xl md:text-5xl mb-8 tracking-tight">
               Ready to unlock your capital potential?
             </h2>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="bg-secondary text-on-secondary px-10 py-5 rounded-md font-headline font-bold uppercase tracking-wider text-sm shadow-xl hover:brightness-110 transition-all">
+              <NewButton variant='primary'>
                 Start Application
-              </button>
-              <button className="border border-white text-white px-10 py-5 rounded-md font-headline font-bold uppercase tracking-wider text-sm hover:bg-white/10 transition-all">
+              </NewButton>
+              <NewButton variant='secondary'
+              >
                 Consult an Advisor
-              </button>
+              </NewButton>
             </div>
           </div>
         </section>
