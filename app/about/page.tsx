@@ -322,7 +322,7 @@ export default function AboutPage() {
                                 </NewButton>
                                 <NewButton variant="secondary">
                                     <Link
-                                        href="/become-partner"
+                                        href="/become-partner/team"
                                     >
                                         Become a Partner
                                     </Link>
