@@ -4,7 +4,7 @@ import React from 'react';
 import { MapPin, Phone, Mail, ArrowRight, Map } from 'lucide-react';
 
 export default function ContactPage() {
-  const TALLY_FORM_URL = "https://tally.so/r/5BO146";
+  const TALLY_FORM_URL = "https://tally.so/r/D4W18E";
   return (
     <div className="bg-slate-50 text-slate-900 font-sans min-h-screen">
 

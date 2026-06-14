@@ -258,7 +258,7 @@ export default function LoanPrograms() {
               <div className="bg-white rounded-xl border border-outline-variant/30 p-8 lg:p-10 nexos-shadow space-y-10">
                 <div className="border-b border-outline-variant/30 pb-8">
                   <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight mb-3">
-                    Commercial Funding
+                    Commercial Property Funding
                   </h2>
                   <p className="text-on-surface-variant font-body text-lg">
                     Institutional architecture for real estate and commercial assets.
@@ -599,7 +599,7 @@ export default function LoanPrograms() {
               <div className="bg-white rounded-xl border border-outline-variant/30 p-8 lg:p-10 nexos-shadow space-y-10">
                 <div className="border-b border-outline-variant/30 pb-8">
                   <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight mb-3">
-                    Investment Funding
+                    Investment Property Funding
                   </h2>
                   <p className="text-on-surface-variant font-body text-lg">
                     Tailored capital solutions for operational scaling and growth.
@@ -774,7 +774,7 @@ export default function LoanPrograms() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 px-8 bg-primary-container text-gray-900">
+        <section className="py-24 px-8 bg-secondary text-white rounded-xl">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="font-headline font-extrabold text-4xl md:text-5xl mb-8 tracking-tight">
               Ready to unlock your capital potential?

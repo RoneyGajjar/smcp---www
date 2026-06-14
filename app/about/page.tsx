@@ -42,15 +42,15 @@ export default function AboutPage() {
             </section>
 
             {/* 2. STATS BANNER (OVERLAPPING HERO) */}
-            <section className="relative z-20 -mt-12 max-w-6xl mx-auto px-6 lg:px-8">
-                <div className="bg-white rounded-2xl shadow-2xl shadow-brand-dark/10 border border-slate-100 p-8 md:p-12">
+            <section className="relative z-20 -mt-12 max-w-6xl mx-auto px-6 lg:px-8 ">
+                <div className="bg-white rounded-2xl shadow-2xl shadow-brand-dark/10  border border-slate-100 p-8 md:p-12">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x-0 md:divide-x divide-slate-100">
-                        <div className="text-center px-4 mb-6 md:mb-0">
+                        {/* <div className="text-center px-4 mb-6 md:mb-0">
                             <h4 className="text-4xl font-black text-primary mb-2">$4.2B+</h4>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Capital Deployed</p>
-                        </div>
+                        </div> */}
                         <div className="text-center px-4 mb-6 md:mb-0">
-                            <h4 className="text-4xl font-black text-primary mb-2">450+</h4>
+                            <h4 className="text-4xl font-black text-primary mb-2">500+</h4>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Institutional Partners</p>
                         </div>
                         <div className="text-center px-4 mb-6 md:mb-0">
@@ -58,7 +58,7 @@ export default function AboutPage() {
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Years Experience</p>
                         </div>
                         <div className="text-center px-4">
-                            <h4 className="text-4xl font-black text-primary mb-2">50</h4>
+                            <h4 className="text-4xl font-black text-primary mb-2">40</h4>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">States Covered</p>
                         </div>
                     </div>
@@ -117,13 +117,13 @@ export default function AboutPage() {
             </section>
 
             {/* 4. BENTO GRID: OUR MISSION & VALUES */}
-            <section className="py-24 bg-slate-50 border-t border-slate-100">
+            <section className="py-24 bg-secondary rouded-xl">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold text-brand-dark tracking-tight font-headline">
+                        <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight font-headline">
                             Engineered for <span className="text-primary">Growth.</span>
                         </h2>
-                        <p className="mt-4 text-lg text-slate-600 max-w-2xl">
+                        <p className="mt-4 text-lg text-white max-w-2xl">
                             Traditional financing moves too slowly and imposes rigid constraints. We were founded on a simple premise: capital should empower your business, not restrict it.
                         </p>
                     </div>
@@ -249,7 +249,7 @@ export default function AboutPage() {
             </section>
 
             {/* 6. THE STRATMIRE ADVANTAGE (Checklist) */}
-            <section className="py-24 bg-slate-50 border-t border-slate-200">
+            <section className="py-24 bg-secondary rounded-xl">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div className="relative hidden md:block">
@@ -265,10 +265,10 @@ export default function AboutPage() {
                         </div>
 
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark tracking-tight font-headline mb-8">
+                            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight font-headline mb-8">
                                 The Stratmire Advantage
                             </h2>
-                            <div className="space-y-6">
+                            <div className="space-y-6 text-white">
                                 {[
                                     "No upfront fees or hidden underwriting costs.",
                                     "Direct access to decision-makers and senior underwriters.",
@@ -280,7 +280,7 @@ export default function AboutPage() {
                                         <div className="mt-1 shrink-0">
                                             <CheckCircle2 className="text-secondary" size={24} />
                                         </div>
-                                        <p className="text-lg text-slate-700 font-medium">{item}</p>
+                                        <p className="text-lg text-white font-medium">{item}</p>
                                     </div>
                                 ))}
                             </div>
