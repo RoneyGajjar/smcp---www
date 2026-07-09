@@ -42,7 +42,7 @@ export default function AdminLogin() {
                 // Log In
                 const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
                 if (loginError) throw loginError;
-                router.push('/admin');
+                router.push('/Admin');
             }
         } catch (err: any) {
             setError(err.message);
